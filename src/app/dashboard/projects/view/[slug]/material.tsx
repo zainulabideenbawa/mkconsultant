@@ -7,7 +7,8 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { Delete, Edit, LocationOn, RemoveRedEye } from '@mui/icons-material';
-
+import { useRouter } from 'next/navigation';
+import { Material } from '@/types';
 interface TablePaginationActionsProps {
     count: number;
     page: number;
@@ -75,14 +76,9 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 
 export default function DashboardTable({ rows }: {
-    rows: {
-        id: string,
-        name: string,
-        email: string,
-        location: string,
-        phone: string,
-    }[]
+    rows: Material[]
 }) {
+    const router = useRouter()
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -109,55 +105,35 @@ export default function DashboardTable({ rows }: {
             <Table sx={{ minWidth: 500 }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Client’s Name</TableCell>
-                        <TableCell >Email</TableCell>
-                        <TableCell>Location</TableCell>
-                        <TableCell>Phone</TableCell>
+                        <TableCell>Sr. No.</TableCell>
+                        <TableCell >Material / Cost</TableCell>
+                        <TableCell>Req For</TableCell>
+                        <TableCell>Supplier</TableCell>
+                        <TableCell>Qty</TableCell>
+                        <TableCell>Unit</TableCell>
+                        <TableCell>Price</TableCell>
+                        <TableCell>Sub Total</TableCell>
+                        <TableCell>VAT%</TableCell>
+                        <TableCell>Total</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {(rowsPerPage > 0
-                        ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        : rows
+                    {(rows
                     ).map((row, index) => (
                         <TableRow key={index}>
-                            <TableCell>{row.name}</TableCell>
-                            <TableCell>{row.email}</TableCell>
-                            <TableCell><LocationOn/>{row.location}</TableCell>
-                            <TableCell>{row.phone}</TableCell>
-                            {/* <TableCell>
-                                <IconButton>
-                                    <Edit />
-                                </IconButton>
-                                <IconButton>
-                                    <Delete />
-                                </IconButton>
-                            </TableCell> */}
+                            <TableCell>{index+1}</TableCell>
+                            <TableCell>{row.material}</TableCell>
+                            <TableCell>{row.requireFor}</TableCell>
+                            <TableCell>{row.supplier.name}</TableCell>
+                            <TableCell>{row.quantity}</TableCell>
+                            <TableCell>{row.unit}</TableCell>
+                            <TableCell>{row.price}</TableCell>
+                            <TableCell>{row.price * row.quantity}</TableCell>
+                            <TableCell>{row.vat}</TableCell>
+                            <TableCell>{row.totalCost}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                            colSpan={4}
-                            count={rows.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            slotProps={{
-                                select: {
-                                    inputProps: {
-                                        'aria-label': 'rows per page',
-                                    },
-                                    native: true,
-                                },
-                            }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={TablePaginationActions}
-                        />
-                    </TableRow>
-                </TableFooter>
             </Table>
         </TableContainer>
     );

@@ -1,10 +1,12 @@
 'use client'
-import { Button, Container, Divider, Grid, Typography, Box, Paper, TextField, Select, FormControl, InputLabel, MenuItem, FormHelperText, Alert } from "@mui/material";
+import { Button, Container, Divider, Grid, Typography, Box, Paper, TextField, Select, FormControl, InputLabel, MenuItem, FormHelperText, Alert, CircularProgress } from "@mui/material";
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Swal from 'sweetalert2'
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { FeaturedPlayListRounded } from "@mui/icons-material";
 const schema = z.object({
     name: z.string().min(3),
     address: z.string().min(3),
@@ -24,7 +26,9 @@ const Suppliers = () => {
     } = useForm<FormData>({
         resolver: zodResolver(schema)
     });
+    const [submiting,setSubmiting] = useState(false)
     const onSubmit: SubmitHandler<FormData> = async data => {
+        setSubmiting(true)
         console.log(data,"data")
         const res = await fetch('/api/suppiler',{
             method:"POST",
@@ -59,6 +63,7 @@ const Suppliers = () => {
                 timer:3000
                });
         }
+        setSubmiting(false)
     };
 
     return (
@@ -182,8 +187,9 @@ const Suppliers = () => {
                                 fullWidth
                                 variant="contained"
                                 color="primary"
+                                disabled={submiting}
                             >
-                                Submit
+                                {submiting ? <CircularProgress /> : "Submit"}
                             </Button>
                         </Grid>
                     </Grid>

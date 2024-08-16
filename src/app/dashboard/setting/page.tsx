@@ -37,6 +37,7 @@ const SettingsForm = () => {
     const session = useSession()
     const router = useRouter()
     const [loading,setLoading] = useState(true)
+    const [submiting,setSubmiting] = useState(false)
     console.log(session,"session")
     useEffect(()=>{
         if(session.status==="authenticated" && session.data.user){
@@ -73,6 +74,7 @@ const SettingsForm = () => {
     });
 
     const onSubmitUserDetails: SubmitHandler<UserDetailsFormData> =async data => {
+        setSubmiting(true)
         console.log(data);
         const res = await fetch('/api/setting',{
             method:"POST",
@@ -107,10 +109,12 @@ const SettingsForm = () => {
                 timer:3000
                });
         }
+        setSubmiting(false)
     };
 
     const onSubmitPasswordChange: SubmitHandler<PasswordChangeFormData> =async data => {
         console.log(data);
+        setSubmiting(true)
         const res = await fetch('/api/setting',{
             method:"PUT",
             body:JSON.stringify({...data,email:session.data?.user?.email})
@@ -144,6 +148,7 @@ const SettingsForm = () => {
                 timer:3000
                });
         }
+        setSubmiting(false)
     };
     if (loading) {
         return (
@@ -228,8 +233,10 @@ const SettingsForm = () => {
                                 fullWidth
                                 variant="contained"
                                 color="primary"
+                                disabled={submiting}
                             >
-                                Save User Details
+                                {submiting ? <CircularProgress /> : "Save User Details"}
+                               
                             </Button>
                         </Grid>
                     </Grid>
@@ -274,8 +281,10 @@ const SettingsForm = () => {
                                 fullWidth
                                 variant="contained"
                                 color="primary"
+                                disabled={submiting}
                             >
-                                Save Password
+                                {submiting ? <CircularProgress /> : "Save Password"}
+                               
                             </Button>
                         </Grid>
                     </Grid>

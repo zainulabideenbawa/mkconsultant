@@ -1,12 +1,14 @@
 'use client'
-import { Button, Grid, Typography, Paper, TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { Button, Grid, Typography, Paper, TextField, Select, MenuItem, FormControl, InputLabel, CircularProgress } from "@mui/material";
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from "next/navigation";
 import Swal from 'sweetalert2'
+import { useState } from "react";
 const schema = z.object({
-    userName: z.string().min(1, "User Name is required"),
+    firstName: z.string().min(1, "User Name is required"),
+    lastName: z.string().min(1, "User Name is required"),
     email: z.string().email("Invalid email address"),
     designation: z.string().min(1, "Designation is required"),
     role: z.string().min(1, "Designation is required"),
@@ -29,7 +31,9 @@ const AddUserForm = () => {
         resolver: zodResolver(schema)
     });
     const router = useRouter()
+    const [submiting,setSubmiting] = useState(false)
     const onSubmit: SubmitHandler<FormData> = async data => {
+        setSubmiting(true)
         console.log(data,"data")
         const res = await fetch('/api/usermanagement',{
             method:"POST",
@@ -64,6 +68,7 @@ const AddUserForm = () => {
                 timer:3000
                });
         }
+        setSubmiting(false)
     };
 
     return (
@@ -72,17 +77,30 @@ const AddUserForm = () => {
             <Paper sx={{ padding: 4 }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="firstName"
+                                label="Enter First Name"
+                                {...register('firstName')}
+                                error={!!errors.firstName}
+                                helperText={errors.firstName ? errors.firstName.message : ''}
+                            />
+                        </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="userName"
-                                label="Enter User Name"
-                                {...register('userName')}
-                                error={!!errors.userName}
-                                helperText={errors.userName ? errors.userName.message : ''}
+                                id="lastName"
+                                label="Enter Last Name"
+                                {...register('lastName')}
+                                error={!!errors.lastName}
+                                helperText={errors.lastName ? errors.lastName.message : ''}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -166,8 +184,10 @@ const AddUserForm = () => {
                                 fullWidth
                                 variant="contained"
                                 color="primary"
-                            >
-                                Create User
+                                disabled={submiting}
+                                >
+                                    {submiting ? <CircularProgress /> : "Create User"}
+                                
                             </Button>
                         </Grid>
                     </Grid>

@@ -31,6 +31,7 @@ const Suppliers = () => {
     const router = useRouter();
     const params = useParams();
     const [loading, setLoading] = useState(true);
+    const [submiting,setSubmiting] = useState(false)
     const { register, handleSubmit, formState: { errors }, setValue, control,getValues } = useForm<FormData>({
         resolver: zodResolver(schema)
     });
@@ -45,6 +46,7 @@ const Suppliers = () => {
 
     const getSupplier = async (slug: any) => {
         setLoading(true);
+        
         const res = await fetch(`/api/subcontractors/${slug}`);
         if (res.ok) {
             const _d = await res.json();
@@ -78,6 +80,7 @@ const Suppliers = () => {
 
     const onSubmit: SubmitHandler<FormData> = async data => {
         console.log(data, "data");
+        setSubmiting(true)
         const res = await fetch(`/api/subcontractors/${params.slug}`, {
             method: "PUT",
             body: JSON.stringify({ ...data })
@@ -108,6 +111,7 @@ const Suppliers = () => {
                 timer: 3000
             });
         }
+        setSubmiting(false)
     };
 
     const toolsOptions = ["110v Everything", "110v Saws", "110v Drills", "110v Routers", "240v Only", "NONE", "Other"];
@@ -356,8 +360,9 @@ const Suppliers = () => {
                                 fullWidth
                                 variant="contained"
                                 color="primary"
+                                disabled={submiting}
                             >
-                                Submit
+                                {submiting ? <CircularProgress /> : "Submit"}
                             </Button>
                         </Grid>
                     </Grid>

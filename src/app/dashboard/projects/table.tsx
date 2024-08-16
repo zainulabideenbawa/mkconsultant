@@ -78,16 +78,16 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 export default function DashboardTable({ rows }: {
     rows: {
         id: string,
-        projectId:string,
-        projectName:string,
-        clientName:string,
-        projectLocation:string,
-        startDate:string,
-        endDate:string,
-        stauts:string,
-        payment:string,
+        projectId: string,
+        name: string,
+        clientName: string,
+        location: string,
+        startDate: string,
+        endDate: string,
+        status: string,
     }[]
 }) {
+    console.log(rows, "rows")
     const router = useRouter()
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -122,7 +122,6 @@ export default function DashboardTable({ rows }: {
                         <TableCell>Start Date</TableCell>
                         <TableCell>End Date</TableCell>
                         <TableCell>Status</TableCell>
-                        <TableCell>Payment</TableCell>
                         <TableCell>Actions</TableCell>
                     </TableRow>
                 </TableHead>
@@ -132,21 +131,23 @@ export default function DashboardTable({ rows }: {
                         : rows
                     ).map((row, index) => (
                         <TableRow key={index}>
-                            <TableCell>{row.projectId}</TableCell>
-                            <TableCell>{row.projectName}</TableCell>
+                            <TableCell>{String(Number(row.projectId)).padStart(6, '0')}</TableCell>
+                            <TableCell>{row.name}</TableCell>
                             <TableCell>{row.clientName}</TableCell>
-                            <TableCell><LocationOn/>{row.projectLocation}</TableCell>
-                            <TableCell>{row.startDate}</TableCell>
-                            <TableCell>{row.endDate}</TableCell>
-                            <TableCell>{row.stauts}</TableCell>
-                            <TableCell>{row.payment}</TableCell>
+                            <TableCell><LocationOn />{row.location}</TableCell>
+                            <TableCell>{new Date(row.startDate).toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(row.endDate).toLocaleDateString()}</TableCell>
                             <TableCell>
-                                <IconButton onClick={()=>router.push(`/dashboard/suppliers/edit/${row.id}`)}>
-                                    <Edit />
+
+                                {row.status === "PENDING" ? <Chip label={row.status} color='error' /> : row.status === "ACTIVE" ? <Chip label={row.status} color='success' /> : <Chip label={row.status} color='warning' />}
+                            </TableCell>
+                            <TableCell>
+                                <IconButton onClick={() => router.push(`/dashboard/projects/view/${row.id}`)}>
+                                    <RemoveRedEye />
                                 </IconButton>
-                                <IconButton>
+                                {/* <IconButton>
                                     <Delete />
-                                </IconButton>
+                                </IconButton> */}
                             </TableCell>
                         </TableRow>
                     ))}

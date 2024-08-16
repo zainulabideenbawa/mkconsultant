@@ -21,6 +21,7 @@ const Suppliers = () => {
     const router = useRouter()
     const params = useParams()
     const [loading, setLoading] = useState(true)
+    const [submiting,setSubmiting] = useState(false)
     console.log(params, "params")
     const {
         register,
@@ -63,6 +64,7 @@ const Suppliers = () => {
     };
 
     const onSubmit: SubmitHandler<FormData> = async data => {
+        setSubmiting(true)
         console.log(data, "data")
         const res = await fetch(`/api/suppiler/${params.slug}`, {
             method: "PUT",
@@ -97,6 +99,7 @@ const Suppliers = () => {
                 timer: 3000
             });
         }
+        setSubmiting(false)
     };
     if (loading) {
         return (
@@ -229,9 +232,11 @@ const Suppliers = () => {
                                 fullWidth
                                 variant="contained"
                                 color="primary"
-                            >
-                                Submit
-                            </Button>
+                                disabled={submiting}
+                                >
+                                    {submiting ? <CircularProgress /> : "Submit"}
+                                </Button>
+                           
                         </Grid>
                     </Grid>
 

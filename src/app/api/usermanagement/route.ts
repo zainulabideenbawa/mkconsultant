@@ -4,8 +4,8 @@ import { z } from 'zod';
 import { hash } from "bcrypt";
 export const dynamic = 'force-dynamic';
 const schema = z.object({
-    firstName:z.string().min(2),
-    lastName:z.string().min(2),
+    firstName: z.string().min(2),
+    lastName: z.string().min(2),
     email: z.string().email("Invalid email address"),
     designation: z.string().min(1, "Designation is required"),
     role: z.string().min(1, "User Type is required"),
@@ -25,16 +25,20 @@ export const POST = async (request: NextRequest) => {
         const hasedPasswrod = await hash(body.password, 12)
         const data = await prisma.user.create({
             data: {
-                ...body,
-                password:hasedPasswrod
+                firstName:body.firstName,
+                lastName:body.lastName,
+                email: body.email,
+                designation: body.designation,
+                role: body.role,
+                password: hasedPasswrod
             },
-            select:{
-                id:true,
-                firstName:true,
-                email:true,
-                lastName:true,
-                designation:true,
-                role:true
+            select: {
+                id: true,
+                firstName: true,
+                email: true,
+                lastName: true,
+                designation: true,
+                role: true
             }
         })
         if (data) {
@@ -55,13 +59,13 @@ export const POST = async (request: NextRequest) => {
 export const GET = async (request: NextRequest) => {
     try {
         const data = await prisma.user.findMany({
-            select:{
-                id:true,
-                firstName:true,
-                email:true,
-                lastName:true,
-                designation:true,
-                role:true
+            select: {
+                id: true,
+                firstName: true,
+                email: true,
+                lastName: true,
+                designation: true,
+                role: true
             }
         })
         if (data) {

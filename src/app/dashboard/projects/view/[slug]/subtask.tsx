@@ -6,7 +6,9 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import { Delete, Edit, LocationOn, RemoveRedEye } from '@mui/icons-material';
+import { Delete, Edit, LocationOn, Receipt, RemoveRedEye } from '@mui/icons-material';
+import { useRouter } from 'next/navigation';
+import { SubTask } from '@/types';
 
 interface TablePaginationActionsProps {
     count: number;
@@ -75,14 +77,9 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 
 export default function DashboardTable({ rows }: {
-    rows: {
-        id: string,
-        name: string,
-        email: string,
-        location: string,
-        phone: string,
-    }[]
+    rows:SubTask[]
 }) {
+    const router = useRouter()
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -109,55 +106,40 @@ export default function DashboardTable({ rows }: {
             <Table sx={{ minWidth: 500 }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Client’s Name</TableCell>
-                        <TableCell >Email</TableCell>
-                        <TableCell>Location</TableCell>
-                        <TableCell>Phone</TableCell>
+                        <TableCell>Sr.NO.</TableCell>
+                        <TableCell>Task Id</TableCell>
+                        <TableCell>Task Name</TableCell>
+                        <TableCell>Description</TableCell>
+                        <TableCell>AssingTo</TableCell>
+                        <TableCell>Start Date</TableCell>
+                        <TableCell>End Date</TableCell>
+                        <TableCell>Cost</TableCell>
+                        <TableCell>VAT%</TableCell> 
+                        <TableCell>Total</TableCell> 
+                        <TableCell>Work Order</TableCell> 
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {(rowsPerPage > 0
-                        ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        : rows
-                    ).map((row, index) => (
+                    {( rows).map((row, index) => (
                         <TableRow key={index}>
+                            <TableCell>{index+1}</TableCell>
+                            <TableCell>{row.taskId}</TableCell>
                             <TableCell>{row.name}</TableCell>
-                            <TableCell>{row.email}</TableCell>
-                            <TableCell><LocationOn/>{row.location}</TableCell>
-                            <TableCell>{row.phone}</TableCell>
-                            {/* <TableCell>
+                            <TableCell>{row.description}</TableCell>
+                            <TableCell>{row.subContactor.name}</TableCell>
+                            <TableCell>{new Date(row.startDate).toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(row.endDate).toLocaleDateString()}</TableCell>
+                            <TableCell>${row.cost}</TableCell>
+                            <TableCell>{row.vat}</TableCell>
+                            <TableCell>{row.cost + (row.vat/100* row.cost)}</TableCell>
+                            <TableCell>
                                 <IconButton>
-                                    <Edit />
+                                    <Receipt />
                                 </IconButton>
-                                <IconButton>
-                                    <Delete />
-                                </IconButton>
-                            </TableCell> */}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                            colSpan={4}
-                            count={rows.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            slotProps={{
-                                select: {
-                                    inputProps: {
-                                        'aria-label': 'rows per page',
-                                    },
-                                    native: true,
-                                },
-                            }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={TablePaginationActions}
-                        />
-                    </TableRow>
-                </TableFooter>
             </Table>
         </TableContainer>
     );

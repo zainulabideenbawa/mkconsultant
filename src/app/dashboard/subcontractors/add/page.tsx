@@ -1,10 +1,11 @@
 'use client'
-import { Button, Container, Divider, Grid, Typography, Box, Paper, TextField, Select, FormControl, InputLabel, MenuItem, Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import { Button, Container, Divider, Grid, Typography, Box, Paper, TextField, Select, FormControl, InputLabel, MenuItem, Checkbox, FormControlLabel, FormGroup, CircularProgress } from "@mui/material";
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from "next/navigation";
 import Swal from 'sweetalert2'
+import { useState } from "react";
 const schema = z.object({
     name: z.string().min(3),
     address: z.string().min(3),
@@ -37,9 +38,10 @@ const Suppliers = () => {
     } = useForm<FormData>({
         resolver: zodResolver(schema)
     });
-
+    const [submiting,setSubmiting] = useState(false)
     const onSubmit: SubmitHandler<FormData> = async data => {
         console.log(data,"data")
+        setSubmiting(true)
         const res = await fetch('/api/subcontractors',{
             method:"POST",
             body:JSON.stringify({...data})
@@ -73,6 +75,7 @@ const Suppliers = () => {
                 timer:3000
                });
         }
+        setSubmiting(false)
     };
 
     const toolsOptions = ["110v Everything", "110v Saws", "110v Drills", "110v Routers", "240v Only", "NONE", "Other"];
@@ -284,8 +287,10 @@ const Suppliers = () => {
                                 fullWidth
                                 variant="contained"
                                 color="primary"
+                                disabled={submiting}
                             >
-                                Submit
+                                  {submiting ? <CircularProgress /> : "Submit"}
+
                             </Button>
                         </Grid>
                     </Grid>

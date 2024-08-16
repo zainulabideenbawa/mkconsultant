@@ -3,9 +3,9 @@ import { Button, Grid, Typography, Box, Paper, TextField, Select, MenuItem, Form
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Swal from 'sweetalert2'
-import { useState } from "react";
 
 const schema = z.object({
     // clientId: z.string().min(1, "Client ID is required"),
@@ -19,19 +19,51 @@ type FormData = z.infer<typeof schema>;
 
 const InvoiceForm = () => {
     const router = useRouter()
+    const params = useParams()
+    const [submiting, setSubmiting] = useState(false)
+    const [loading, setLoading] = useState(true)
     const {
         register,
         handleSubmit,
-        formState: { errors }
+        formState: { errors },
+        setValue
     } = useForm<FormData>({
         resolver: zodResolver(schema)
     });
-    const [submiting, setSubmiting] = useState(false)
+    useEffect(() => {
+        if (params.slug) {
+            getSupplier(params.slug)
+        } else {
+            router.back()
+        }
+    }, [params])
+    const getSupplier = async (slug: any) => {
+        setLoading(true);
+        const res = await fetch(`/api/client/${slug}`);
+        if (res.ok) {
+            const _d = await res.json();
+            if (_d.status) {
+                const _data = _d.data;
+                console.log(_data, "data from api");
+                setValue('name', _data.name);
+                setValue('email', _data.email);
+                setValue('location', _data.location);
+                setValue('phone', _data.phone);
+            } else {
+                router.back();
+            }
+        } else {
+            router.back();
+        }
+        setLoading(false);
+    };
+
+
     const onSubmit: SubmitHandler<FormData> = async data => {
         console.log(data, "data")
         setSubmiting(true)
-        const res = await fetch('/api/client', {
-            method: "POST",
+        const res = await fetch(`/api/suppiler/${params.slug}`, {
+            method: "PUT",
             body: JSON.stringify({ ...data })
         })
         if (res.ok) {
@@ -41,10 +73,10 @@ const InvoiceForm = () => {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
-                    text: "Client Added Successfully",
+                    text: "Client Updated Successfully",
                     timer: 3000
                 });
-                router.back()
+                router.replace('/dashboard/client')
             } else {
                 Swal.fire({
                     icon: "error",
@@ -65,6 +97,12 @@ const InvoiceForm = () => {
         }
         setSubmiting(false)
     };
+    if (loading) {
+        return (
+            <main>
+                <CircularProgress />
+            </main>)
+    }
 
     return (
         <main>
@@ -135,6 +173,7 @@ const InvoiceForm = () => {
                                 disabled={submiting}
                             >
                                 {submiting ? <CircularProgress /> : "Submit"}
+                               
                             </Button>
                         </Grid>
                     </Grid>

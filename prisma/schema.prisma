@@ -15,32 +15,34 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid())
-  email       String   @unique
+  id          String    @id @default(cuid())
+  email       String    @unique
   firstName   String?
   lastName    String?
   password    String
   designation String
-  role        String   @default("USER")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  role        String    @default("USER")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  projects    Project[]
 }
 
 model Supplier {
-  id           String  @id @default(cuid())
+  id           String     @id @default(cuid())
   name         String
   address      String
   phone        String
   supplierType String
   markup       String
-  email        String  @unique
+  email        String     @unique
   notes        String?
+  material     Material[]
 }
 
 model SubContractor {
-  id                   String   @id @default(cuid())
+  id                   String    @id @default(cuid())
   name                 String
-  email                String   @unique
+  email                String    @unique
   address              String
   phone                String
   dateOfBirth          DateTime
@@ -55,4 +57,73 @@ model SubContractor {
   experienceType       String[]
   experiencePartitions String[]
   notes                String?
+  subTasks             SubTask[]
+}
+
+model Project {
+  id             String        @id @default(cuid())
+  projectId      Int           @default(sequence())
+  name           String
+  location       String
+  startDate      DateTime
+  endDate        DateTime
+  projectManager String
+  contactPerson  String
+  phone          String
+  user           User          @relation(fields: [projectManager], references: [id])
+  clientId       String
+  client         Client        @relation(fields: [clientId], references: [id])
+  materialMarkUp String
+  SubTask        SubTask[]
+  Material       Material[]
+  status         PROJECTSTATUS @default(PENDING)
+}
+
+enum PROJECTSTATUS {
+  ACTIVE
+  PENDING
+  APPROVED
+  COMPLETED
+  REJECTED
+}
+
+model Client {
+  id       String    @id @default(cuid())
+  clientId Int       @default(sequence())
+  name     String
+  email    String
+  phone    String
+  location String
+  project  Project[]
+}
+
+model SubTask {
+  id           String        @id @default(cuid())
+  taskId       Int           @default(sequence())
+  name         String
+  description  String
+  assingTo     String
+  subContactor SubContractor @relation(fields: [assingTo], references: [id])
+  startDate    DateTime
+  endDate      DateTime
+  cost         Int
+  vat          Int
+  Project      Project?      @relation(fields: [projectId], references: [id])
+  projectId    String?
+}
+
+model Material {
+  id         String @id @default(cuid())
+  material   String
+  requireFor String
+  supplierId String
+  quantity   Int
+  unit       String
+  price      Float
+  vat        Int
+  totalCost  Float
+
+  supplier  Supplier @relation(fields: [supplierId], references: [id])
+  Project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
 }

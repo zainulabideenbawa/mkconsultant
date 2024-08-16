@@ -31,6 +31,7 @@ const AddUserForm = () => {
     const params = useParams()
     const router = useRouter()
     const [loading, setLoading] = useState(true)
+    const [submiting,setSubmiting] = useState(false)
     useEffect(() => {
         if (params.slug) {
             getSupplier(params.slug)
@@ -61,6 +62,7 @@ const AddUserForm = () => {
     };
 
     const onSubmit: SubmitHandler<FormData> = async data => {
+        setSubmiting(true)
         console.log(data, "data")
         const res = await fetch(`/api/usermanagement/${params.slug}`, {
             method: "PUT",
@@ -95,6 +97,7 @@ const AddUserForm = () => {
                 timer: 3000
             });
         }
+        setSubmiting(false)
     };
     if (loading) {
         return (
@@ -220,8 +223,10 @@ const AddUserForm = () => {
                                 fullWidth
                                 variant="contained"
                                 color="primary"
-                            >
-                                Update User
+                                disabled={submiting}
+                                >
+                                    {submiting ? <CircularProgress /> : "Update User"}
+                                
                             </Button>
                         </Grid>
                     </Grid>

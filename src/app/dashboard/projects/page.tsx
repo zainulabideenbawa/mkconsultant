@@ -7,27 +7,14 @@ const Projects = async () => {
 
     const projects: {
         id: string,
-        projectId:string,
-        projectName:string,
-        clientName:string,
-        projectLocation:string,
-        startDate:string,
-        endDate:string,
-        stauts:string,
-        payment:string,
-    }[] = [...Array(100).keys()].map((index) => ({
-        id: index + 1 + "",
-        projectId:faker.number.int().toLocaleString(),
-        projectName:"Roof Fixing",
-        clientName:faker.person.fullName(),
-        projectLocation:faker.location.country(),
-        startDate:faker.date.past().toLocaleDateString(),
-        endDate:faker.date.future().toLocaleDateString(),
-        stauts:faker.helpers.arrayElement(['ACTIVE','PENDING',"COMPLETED"]),
-        payment:faker.helpers.arrayElement(['PENDING','COMPLETE PAYMENT']),
-
-
-    }))
+        projectId: string,
+        name: string,
+        clientName: string,
+        location: string,
+        startDate: string,
+        endDate: string,
+        status: string,
+    }[] = await getData().then(d => d.data.map((f: any) => ({ ...f, clientName: f.client.name })))
     return (
         <main>
             <Typography variant='h4' sx={{ fontWeight: "bold", marginBottom: 4 }}>Projects</Typography>
@@ -46,4 +33,23 @@ const Projects = async () => {
 }
 
 export default Projects
+
+async function getData() {
+    let api = process.env.URL + '/api/project'
+    console.log(api, "api")
+    const res = await fetch(api, { cache: 'no-store' })
+    // The return value is *not* serialized
+    // You can return Date, Map, Set, etc.
+
+    if (!res.ok) {
+        // This will activate the closest `error.js` Error Boundary
+        console.log(await res.json())
+        throw new Error('Failed to fetch data')
+    }
+
+    // Only return the data, not the entire dashboard element
+    return res.json()
+    // return null
+}
+
 
