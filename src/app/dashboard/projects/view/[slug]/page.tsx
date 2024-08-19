@@ -14,7 +14,7 @@ import Logo04 from '@/assets/logos-04.png'
 import Swal from "sweetalert2";
 import { z } from 'zod';
 import { Controller, useForm } from "react-hook-form";
-import { SubContractor, Supplier } from "@prisma/client";
+import type { SubContractor, Supplier } from "@prisma/client";
 import { CircleOutlined } from "@mui/icons-material";
 
 

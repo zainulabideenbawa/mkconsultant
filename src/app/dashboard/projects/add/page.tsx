@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { TextField, Button, Container, Grid, Box, Typography, Paper, Icon, Menu, MenuItem, Autocomplete, CircularProgress, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { z } from 'zod';
 import Delete from '@mui/icons-material/Delete'
-import { Client, SubContractor, Supplier, User } from '@prisma/client';
+import type {  Client, SubContractor, Supplier, User } from '@prisma/client';
 
 import Swal from 'sweetalert2';
 const subTaskSchema = z.object({
