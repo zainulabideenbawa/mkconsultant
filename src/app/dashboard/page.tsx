@@ -109,7 +109,7 @@ export default function Home() {
             <Typography variant="h4">Recent Invoices</Typography>
             {
               recetInvoices.map((invoice, index) => (
-                <Box sx={{ marginTop: 3 }}>
+                <Box key={index} sx={{ marginTop: 3 }}>
                   <Box sx={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: 'space-between', marginBottom: 2 }}>
                     <Box>
                       <Typography variant="h6">Invoice # {invoice.name}</Typography>
