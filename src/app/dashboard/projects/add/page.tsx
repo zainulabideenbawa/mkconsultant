@@ -5,9 +5,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { TextField, Button, Container, Grid, Box, Typography, Paper, Icon, Menu, MenuItem, Autocomplete, CircularProgress, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { z } from 'zod';
 import Delete from '@mui/icons-material/Delete'
-import type {  Client, SubContractor, Supplier, User } from '@prisma/client';
 
 import Swal from 'sweetalert2';
+
+
+
+
 const subTaskSchema = z.object({
     subTaskId: z.string().nonempty('Sub Task ID is required'),
     subTaskName: z.string().nonempty('Sub Task Name is required'),
@@ -52,10 +55,54 @@ type Project = z.infer<typeof projectSchema>;
 
 type FormValues = Omit<Material, 'totalCost'>;
 const ProjectForm = () => {
-    const [users, setUsers] = useState<User[]>()
-    const [client, setClient] = useState<Client[]>()
-    const [subContractor, setSubContrator] = useState<SubContractor[]>()
-    const [Suppliers, setSuppliers] = useState<Supplier[]>()
+    const [users, setUsers] = useState<{
+        id: string;
+        email: string;
+        firstName: string | null;
+        lastName: string | null;
+        password: string;
+        designation: string;
+        role: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>()
+    const [client, setClient] = useState<{
+        id: string;
+        clientId: number;
+        name: string;
+        email: string;
+        phone: string;
+        location: string;
+    }[]>()
+    const [subContractor, setSubContrator] = useState<{
+        id: string,
+        name: string,
+        email: string,
+        address: string,
+        phone: string,
+        dateOfBirth: Date,
+        applicantType: string,
+        approxTeamSize: string,
+        dailyRate: string,
+        areasOfWork: string,
+        taxStatus: string,
+        tools: string[],
+        transport: string[],
+        licence: string[],
+        experienceType: string[],
+        experiencePartitions: string[],
+        notes: string|null,
+    }[]>()
+    const [Suppliers, setSuppliers] = useState<{
+        id: string;
+        name: string;
+        address: string;
+        phone: string;
+        supplierType: string;
+        markup: string;
+        email: string;
+        notes: string | null;
+    }[]>()
     const [disableCleint, setDisableClient] = useState(true)
     const [loading, setLoading] = useState(true)
     const [submiting, setSubmiting] = useState(false)

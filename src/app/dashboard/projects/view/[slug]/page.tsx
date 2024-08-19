@@ -14,7 +14,6 @@ import Logo04 from '@/assets/logos-04.png'
 import Swal from "sweetalert2";
 import { z } from 'zod';
 import { Controller, useForm } from "react-hook-form";
-import type { SubContractor, Supplier } from "@prisma/client";
 import { CircleOutlined } from "@mui/icons-material";
 
 
@@ -65,8 +64,35 @@ const Projects = () => {
 
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState<QuotationData>()
-    const [subContractor, setSubContrator] = useState<SubContractor[]>()
-    const [Suppliers, setSuppliers] = useState<Supplier[]>()
+    const [subContractor, setSubContrator] = useState<{
+        id: string,
+        name: string,
+        email: string,
+        address: string,
+        phone: string,
+        dateOfBirth: Date,
+        applicantType: string,
+        approxTeamSize: string,
+        dailyRate: string,
+        areasOfWork: string,
+        taxStatus: string,
+        tools: string[],
+        transport: string[],
+        licence: string[],
+        experienceType: string[],
+        experiencePartitions: string[],
+        notes: string | null,
+    }[]>()
+    const [Suppliers, setSuppliers] = useState<{
+        id: string;
+        name: string;
+        address: string;
+        phone: string;
+        supplierType: string;
+        markup: string;
+        email: string;
+        notes: string | null;
+    }[]>()
     const [groupedMaterials, setGroupedMaterials] = useState<GroupedMaterialsBySupplier[]>([]);
     const [groupedSubTasks, setGroupedSubTasks] = useState<GroupedSubTaksByContractor[]>([]);
     const [submiting, setSubmiting] = useState(false)
@@ -157,7 +183,7 @@ const Projects = () => {
         setMaterialValue('vat', 0)
         setMaterialDialoge(false)
     };
-    const onSubmitSubTask = async(formData: SubTaskForm) => {
+    const onSubmitSubTask = async (formData: SubTaskForm) => {
         setSubmiting(true)
         const res = await fetch(`/api/project/${params.slug}/addSubtask`, {
             method: "POST",
