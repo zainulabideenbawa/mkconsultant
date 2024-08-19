@@ -241,7 +241,7 @@ const ProjectForm = () => {
                         <Grid item xs={12} sm={6} md={4}>
                             <TextField select label="Project Manager" {...register("projectManager")} fullWidth error={!!errors.projectManager}
                                 helperText={errors.projectManager?.message} >
-                                {users?.map(d => <MenuItem value={d.id}>{`${d.firstName} ${d.lastName}`}</MenuItem>)}
+                                {users?.map(d => <MenuItem key={d.id} value={d.id}>{`${d.firstName} ${d.lastName}`}</MenuItem>)}
                             </TextField>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
@@ -370,7 +370,7 @@ const ProjectForm = () => {
                                                 error={!!errors.subTasks?.[index]?.assignTo}
                                                 helperText={errors.subTasks?.[index]?.assignTo?.message}
                                             >
-                                                {subContractor?.map(s => <MenuItem value={s.id}>{s.name}</MenuItem>)}
+                                                {subContractor?.map(s => <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>)}
                                             </TextField>
                                         </Grid>
                                         <Grid item xs={12} sm={4}>
@@ -514,7 +514,7 @@ const ProjectForm = () => {
                                     <TextField {...field} select fullWidth label="Select Supplier" error={!!errorsMaterial.supplier}
                                         helperText={errorsMaterial.supplier?.message}>
                                         <MenuItem value=""></MenuItem>
-                                        {Suppliers?.map(d => <MenuItem value={d.id}>{d.name}</MenuItem>)}
+                                        {Suppliers?.map(d => <MenuItem key={d.id} value={d.id}>{d.name}</MenuItem>)}
                                     </TextField>
                                 )}
                             />

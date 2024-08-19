@@ -657,7 +657,7 @@ const Projects = () => {
                                     <TextField disabled={submiting} {...field} select fullWidth label="Select Supplier" error={!!errorsMaterial.supplierId}
                                         helperText={errorsMaterial.supplierId?.message}>
                                         <MenuItem value=""></MenuItem>
-                                        {Suppliers?.map(d => <MenuItem value={d.id}>{d.name}</MenuItem>)}
+                                        {Suppliers?.map(d => <MenuItem key={d.id} value={d.id}>{d.name}</MenuItem>)}
                                     </TextField>
                                 )}
                             />
@@ -811,7 +811,7 @@ const Projects = () => {
                                 error={!!errorsSubTask?.assignTo}
                                 helperText={errorsSubTask?.assignTo?.message}
                             >
-                                {subContractor?.map(s => <MenuItem value={s.id}>{s.name}</MenuItem>)}
+                                {subContractor?.map(s => <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>)}
                             </TextField>
                         </Grid>
                         <Grid item xs={12} sm={4}>
