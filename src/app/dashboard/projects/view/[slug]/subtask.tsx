@@ -116,7 +116,7 @@ export default function DashboardTable({ rows }: {
                         <TableCell>Cost</TableCell>
                         <TableCell>VAT%</TableCell> 
                         <TableCell>Total</TableCell> 
-                        <TableCell>Work Order</TableCell> 
+                        {/* <TableCell>Work Order</TableCell>  */}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -132,11 +132,11 @@ export default function DashboardTable({ rows }: {
                             <TableCell>${row.cost}</TableCell>
                             <TableCell>{row.vat}</TableCell>
                             <TableCell>{row.cost + (row.vat/100* row.cost)}</TableCell>
-                            <TableCell>
+                            {/* <TableCell>
                                 <IconButton>
                                     <Receipt />
                                 </IconButton>
-                            </TableCell>
+                            </TableCell> */}
                         </TableRow>
                     ))}
                 </TableBody>

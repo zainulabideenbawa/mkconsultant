@@ -61,22 +61,26 @@ model SubContractor {
 }
 
 model Project {
-  id             String        @id @default(cuid())
-  projectId      Int           @default(sequence())
-  name           String
-  location       String
-  startDate      DateTime
-  endDate        DateTime
-  projectManager String
-  contactPerson  String
-  phone          String
-  user           User          @relation(fields: [projectManager], references: [id])
-  clientId       String
-  client         Client        @relation(fields: [clientId], references: [id])
-  materialMarkUp String
-  SubTask        SubTask[]
-  Material       Material[]
-  status         PROJECTSTATUS @default(PENDING)
+  id                String        @id @default(cuid())
+  projectId         Int           @default(sequence())
+  name              String
+  location          String
+  startDate         DateTime
+  endDate           DateTime
+  projectManager    String
+  contactPerson     String
+  phone             String
+  user              User          @relation(fields: [projectManager], references: [id])
+  clientId          String
+  client            Client        @relation(fields: [clientId], references: [id])
+  materialMarkUp    String
+  SubTask           SubTask[]
+  Material          Material[]
+  status            PROJECTSTATUS @default(PENDING)
+  totalAmount       Int           @default(0)
+  remainingAmount   Int           @default(0)
+  qutationGenerated Boolean       @default(false)
+  Invoice           Invoice[]
 }
 
 enum PROJECTSTATUS {
@@ -95,35 +99,50 @@ model Client {
   phone    String
   location String
   project  Project[]
+  Invoice  Invoice[]
 }
 
 model SubTask {
-  id           String        @id @default(cuid())
-  taskId       Int           @default(sequence())
-  name         String
-  description  String
-  assingTo     String
-  subContactor SubContractor @relation(fields: [assingTo], references: [id])
-  startDate    DateTime
-  endDate      DateTime
-  cost         Int
-  vat          Int
-  Project      Project?      @relation(fields: [projectId], references: [id])
-  projectId    String?
+  id                 String        @id @default(cuid())
+  taskId             Int           @default(sequence())
+  name               String
+  description        String
+  assingTo           String
+  subContactor       SubContractor @relation(fields: [assingTo], references: [id])
+  startDate          DateTime
+  endDate            DateTime
+  cost               Int
+  vat                Int
+  Project            Project?      @relation(fields: [projectId], references: [id])
+  projectId          String?
+  workorderGenerated Boolean       @default(false)
 }
 
 model Material {
-  id         String @id @default(cuid())
-  material   String
-  requireFor String
-  supplierId String
-  quantity   Int
-  unit       String
-  price      Float
-  vat        Int
-  totalCost  Float
+  id                      String   @id @default(cuid())
+  material                String
+  requireFor              String
+  supplierId              String
+  quantity                Int
+  unit                    String
+  price                   Float
+  vat                     Int
+  totalCost               Float
+  supplierReuestGenerated Boolean  @default(false)
+  supplier                Supplier @relation(fields: [supplierId], references: [id])
+  Project                 Project? @relation(fields: [projectId], references: [id])
+  projectId               String?
+}
 
-  supplier  Supplier @relation(fields: [supplierId], references: [id])
-  Project   Project? @relation(fields: [projectId], references: [id])
-  projectId String?
+model Invoice {
+  id          String   @id @default(cuid())
+  InvoiceId   Int      @default(sequence())
+  clientId    String
+  client      Client   @relation(fields: [clientId], references: [id])
+  Project     Project? @relation(fields: [projectId], references: [id])
+  projectId   String?
+  dueDate     DateTime
+  createdDate DateTime
+  Amount      Int
+  remarks     String
 }

@@ -6,11 +6,17 @@ import { z } from 'zod';
 
 
 
-export const GET = async (request: NextRequest, { params }: { params: { slug: string } }) => {
+
+
+export const POST = async (request: NextRequest, { params }: { params: { slug: string } }) => {
     try {
-        const data = await prisma.project.findUnique({
+        const _d = await request.json()
+        const data = await prisma.project.update({
             where: {
                 id: params.slug
+            },
+            data: {
+                materialMarkUp: _d.markup
             },
             include: {
                 SubTask: {

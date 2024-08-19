@@ -23,6 +23,9 @@ export interface SubTask {
   subContactor: {
     id: string;
     name: string;
+    address:string
+    email:string
+    phone:string
   };
 }
 
@@ -52,7 +55,14 @@ export interface Material {
   totalCost: number;
   projectId: string;
   supplier: {
-    name: string;
+    address: string
+    email: string
+    id:string
+    markup:string
+    name:string
+    notes:string
+    phone:string
+    supplierType:string
   };
 }
 
