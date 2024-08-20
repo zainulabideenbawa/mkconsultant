@@ -13,6 +13,7 @@ export const GET = async (request: NextRequest, { params }: { params: { slug: st
                 id: params.slug
             },
             include: {
+                documents: true,
                 SubTask: {
                     include: {
                         subContactor: {

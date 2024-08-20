@@ -23,9 +23,9 @@ export interface SubTask {
   subContactor: {
     id: string;
     name: string;
-    address:string
-    email:string
-    phone:string
+    address: string
+    email: string
+    phone: string
   };
 }
 
@@ -57,12 +57,12 @@ export interface Material {
   supplier: {
     address: string
     email: string
-    id:string
-    markup:string
-    name:string
-    notes:string
-    phone:string
-    supplierType:string
+    id: string
+    markup: string
+    name: string
+    notes: string
+    phone: string
+    supplierType: string
   };
 }
 
@@ -83,4 +83,14 @@ export interface QuotationData {
   client: Client;
   user: User;
   Material: Material[];
+  qutationGenerated: boolean
+  documents: Document[]
+  remainingAmount:number
+}
+
+export interface Document {
+  id: string,
+  name: string,
+  url: string,
+  projectId: string
 }

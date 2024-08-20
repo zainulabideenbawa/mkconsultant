@@ -81,8 +81,16 @@ model Project {
   remainingAmount   Int           @default(0)
   qutationGenerated Boolean       @default(false)
   Invoice           Invoice[]
+  documents         documents[]
 }
 
+model documents {
+  id String        @id @default(cuid())
+  name String
+  url String
+  Project            Project?      @relation(fields: [projectId], references: [id])
+  projectId          String?
+}
 enum PROJECTSTATUS {
   ACTIVE
   PENDING

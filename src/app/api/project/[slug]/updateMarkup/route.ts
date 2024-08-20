@@ -16,7 +16,8 @@ export const POST = async (request: NextRequest, { params }: { params: { slug: s
                 id: params.slug
             },
             data: {
-                materialMarkUp: _d.markup
+                materialMarkUp: _d.markup,
+                qutationGenerated:true,
             },
             include: {
                 SubTask: {
