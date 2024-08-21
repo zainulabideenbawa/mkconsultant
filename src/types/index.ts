@@ -36,6 +36,7 @@ export interface Client {
   email: string;
   phone: string;
   location: string;
+  project:QuotationData[]
 }
 
 export interface User {
@@ -67,6 +68,7 @@ export interface Material {
 }
 
 export interface QuotationData {
+  totalAmount: any
   id: string;
   projectId: number;
   name: string;

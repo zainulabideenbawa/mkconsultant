@@ -117,7 +117,7 @@ export default function DashboardTable({ rows }: {
                         <TableCell>Phone</TableCell>
                         <TableCell>Project #</TableCell>
                         <TableCell>Amount</TableCell>
-                        <TableCell>Action</TableCell>
+                        {/* <TableCell>Action</TableCell> */}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -132,14 +132,14 @@ export default function DashboardTable({ rows }: {
                             <TableCell>{row.phone}</TableCell>
                             <TableCell>{row.project}</TableCell>
                             <TableCell>{row.amount}</TableCell>
-                            <TableCell>
+                            {/* <TableCell>
                                 <IconButton>
                                     <Edit />
                                 </IconButton>
                                 <IconButton>
                                     <Delete />
                                 </IconButton>
-                            </TableCell>
+                            </TableCell> */}
                         </TableRow>
                     ))}
                 </TableBody>

@@ -4,11 +4,11 @@ import { getServerSession } from 'next-auth'
 import { redirect  } from "next/navigation";
 export default async function Home() {
   const session = await getServerSession(authOptions)
-  // if (session) {
-  //   redirect("/dashboard")
-  // }else{
-  //   redirect('/auth/login')
-  // }
+  if (session?.user) {
+    redirect("/dashboard")
+  }else{
+    redirect('/auth/login')
+  }
   return (
     <main>
       <h1>Welcome to Next.js!</h1>

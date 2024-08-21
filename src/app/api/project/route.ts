@@ -78,6 +78,8 @@ export const POST = async (request: NextRequest) => {
                 phone: body.phone,
                 clientId: client,
                 materialMarkUp: "0",
+                totalAmount: Number(body.subTasks.reduce((total, subTask) => total + (subTask.addCost + (subTask.vat / 100 * subTask.addCost)), 0)) + Number(body.materials.reduce((total, subTask) => total + subTask.totalCost, 0)),
+                remainingAmount:Number(body.subTasks.reduce((total, subTask) => total + (subTask.addCost + (subTask.vat / 100 * subTask.addCost)), 0)) + Number(body.materials.reduce((total, subTask) => total + subTask.totalCost, 0)),
                 Material: {
                     create: body.materials.map(m => ({
                         material: m.material,

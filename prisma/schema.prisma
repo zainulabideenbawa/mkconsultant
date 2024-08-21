@@ -85,12 +85,13 @@ model Project {
 }
 
 model documents {
-  id String        @id @default(cuid())
-  name String
-  url String
-  Project            Project?      @relation(fields: [projectId], references: [id])
-  projectId          String?
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  Project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
 }
+
 enum PROJECTSTATUS {
   ACTIVE
   PENDING
@@ -103,7 +104,7 @@ model Client {
   id       String    @id @default(cuid())
   clientId Int       @default(sequence())
   name     String
-  email    String
+  email    String    @unique()
   phone    String
   location String
   project  Project[]
@@ -143,14 +144,20 @@ model Material {
 }
 
 model Invoice {
-  id          String   @id @default(cuid())
-  InvoiceId   Int      @default(sequence())
+  id          String        @id @default(cuid())
+  InvoiceId   Int           @default(sequence())
   clientId    String
-  client      Client   @relation(fields: [clientId], references: [id])
-  Project     Project? @relation(fields: [projectId], references: [id])
+  client      Client        @relation(fields: [clientId], references: [id])
+  Project     Project?      @relation(fields: [projectId], references: [id])
   projectId   String?
   dueDate     DateTime
   createdDate DateTime
   Amount      Int
   remarks     String
+  status      invoiceStatus @default(UNPAID)
+}
+
+enum invoiceStatus {
+  UNPAID
+  PAID
 }

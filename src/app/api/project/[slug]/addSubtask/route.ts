@@ -44,6 +44,19 @@ export const POST = async (request: NextRequest, { params }: { params: { slug: s
                 },
             }
         })
+        await prisma.project.update({
+            where:{
+                id:params.slug
+            },
+            data:{
+                totalAmount:{
+                    increment:body.addCost + (body.addCost*(body.vat/100)),
+                },
+                remainingAmount:{
+                    increment:body.addCost + (body.addCost*(body.vat/100)),
+                }
+            }
+        })
         return NextResponse.json({ status: true, data })
         // } else {
         //     throw new Error("Failed to get suppliers")
