@@ -125,10 +125,12 @@ model SubTask {
   Project            Project?      @relation(fields: [projectId], references: [id])
   projectId          String?
   workorderGenerated Boolean       @default(false)
+  payment            invoiceStatus @default(UNPAID)
+  transactionType    String        @default("")
 }
 
 model Material {
-  id                      String   @id @default(cuid())
+  id                      String        @id @default(cuid())
   material                String
   requireFor              String
   supplierId              String
@@ -137,24 +139,27 @@ model Material {
   price                   Float
   vat                     Int
   totalCost               Float
-  supplierReuestGenerated Boolean  @default(false)
-  supplier                Supplier @relation(fields: [supplierId], references: [id])
-  Project                 Project? @relation(fields: [projectId], references: [id])
+  supplierReuestGenerated Boolean       @default(false)
+  supplier                Supplier      @relation(fields: [supplierId], references: [id])
+  Project                 Project?      @relation(fields: [projectId], references: [id])
   projectId               String?
+  payment                 invoiceStatus @default(UNPAID)
+  transactionType         String        @default("")
 }
 
 model Invoice {
-  id          String        @id @default(cuid())
-  InvoiceId   Int           @default(sequence())
-  clientId    String
-  client      Client        @relation(fields: [clientId], references: [id])
-  Project     Project?      @relation(fields: [projectId], references: [id])
-  projectId   String?
-  dueDate     DateTime
-  createdDate DateTime
-  Amount      Int
-  remarks     String
-  status      invoiceStatus @default(UNPAID)
+  id              String        @id @default(cuid())
+  InvoiceId       Int           @default(sequence())
+  clientId        String
+  client          Client        @relation(fields: [clientId], references: [id])
+  Project         Project?      @relation(fields: [projectId], references: [id])
+  projectId       String?
+  dueDate         DateTime
+  createdDate     DateTime
+  Amount          Int
+  remarks         String
+  status          invoiceStatus @default(UNPAID)
+  transactionType String        @default("")
 }
 
 enum invoiceStatus {

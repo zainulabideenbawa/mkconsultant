@@ -1,6 +1,6 @@
 'use client'
-import { QuotationData, Material, SubTask } from "@/types";
-import { Button, Container, Divider, Grid, Typography, Box, Paper, TextField, CircularProgress, Dialog, DialogContent, MenuItem, DialogActions, Chip, IconButton } from "@mui/material";
+import { QuotationData, Material, SubTask, PROJECTSTATUS } from "@/types";
+import { Button, Container, Divider, Grid, Typography, Box, Paper, TextField, CircularProgress, Dialog, DialogContent, MenuItem, DialogActions, Chip, IconButton, FormControl, InputLabel, Select } from "@mui/material";
 import { useRouter, useParams } from "next/navigation";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import SubTaskTable from './subtask'
@@ -107,6 +107,9 @@ const Projects = () => {
     const [groupedMaterials, setGroupedMaterials] = useState<GroupedMaterialsBySupplier[]>([]);
     const [groupedSubTasks, setGroupedSubTasks] = useState<GroupedSubTaksByContractor[]>([]);
     const [submiting, setSubmiting] = useState(false)
+    const [showSelect, setShowSelect] = useState(false)
+    const [selectValue, setSelectValue] = useState("")
+
     const [total, setTotal] = useState({
         subTaskAmount: 0,
         materialAmount: 0,
@@ -795,38 +798,96 @@ const Projects = () => {
             {data?.qutationGenerated && <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignContent: 'flex-end', alignItems: 'center' }}>
                 <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Project Details</Typography>
                 <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignContent: 'flex-end', alignItems: 'center' }}>
-                    <Typography variant='subtitle1' sx={{ fontWeight: "bold", marginBottom: 2, marginRight: 5 }}>Project Status: <Chip label={data?.status} /></Typography>
+                    <Box sx={{ display: "flex", flexDirection: "row", marginRight: 5 }}>
+                        <Typography variant='subtitle1' sx={{ fontWeight: "bold", marginBottom: 2, marginRight: 5 }}>Project Status:</Typography>
+                        {showSelect ?
+                            <FormControl fullWidth  >
+                                <InputLabel id="demo-simple-select-label">Select Project Status</InputLabel>
+                                <Select
+                                    fullWidth
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={data.status}
+                                    disabled={submiting}
+                                    label="Select Payment Status"
+                                    onChange={async (e) => {
+                                        setSubmiting(true)
+                                        const res = await fetch(`/api/project/${params.slug}/updateProjectStatus`, {
+                                            method: "POST",
+                                            body: JSON.stringify({ status: e.target.value })
+                                        });
+                                        if (res.ok) {
+                                            const _d = await res.json();
+                                            if (_d.status) {
+
+                                                Swal.fire({
+                                                    icon: "success",
+                                                    title: "Success",
+                                                    text: "Status Updated Successfully",
+                                                    timer: 3000
+                                                })
+                                                router.refresh()
+                                            } else {
+                                                Swal.fire({
+                                                    icon: "error",
+                                                    title: "Error",
+                                                    text: "Error Update Status",
+                                                    timer: 3000
+                                                })
+                                            }
+                                        } else {
+                                            // router.back();
+                                            Swal.fire({
+                                                icon: "error",
+                                                title: "Error",
+                                                text: "Error Update Status",
+                                                timer: 3000
+                                            })
+                                        }
+                                        setShowSelect(false)
+                                        setSubmiting(false)
+                                    }}
+                                >
+                                    {["ACTIVE","PENDING","APPROVED","COMPLETED","REJECTED"].map((status) => (
+                                        <MenuItem key={status} value={status}>
+                                            {status}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            : <Chip onClick={() => setShowSelect(true)} label={data.status} color={data.status === "PENDING" ? "error" : data.status === "ACTIVE" ? "success" : 'warning'} />}
+                    </Box>
                     <Button sx={{ marginTop: -2 }} variant='contained' color="primary" onClick={generatePDF}>Download quotation</Button>
                 </Box>
             </Box>}
-            
+
             <Paper sx={{ padding: 4 }}>
-            {data?.qutationGenerated && <Grid container spacing={2} marginBottom={5}>
-                <Grid item xs={12} sm={6} md={3}>
-                    <Box sx={{ border: "1px solid black", borderRadius: 5 ,textAlign:"center"}}>
-                        <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Sub Tasks</Typography>
-                        <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>{data.SubTask.length}</Typography>
-                    </Box>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <Box sx={{ border: "1px solid black", borderRadius: 5 ,textAlign:"center"}}>
-                        <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Pending</Typography>
-                        <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>$ {total.totalAmount.toLocaleString()}</Typography>
-                    </Box>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <Box sx={{ border: "1px solid black", borderRadius: 5 ,textAlign:"center"}}>
-                        <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Received</Typography>
-                        <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>$ {data.remainingAmount === 0 ? 0:(total.totalAmount - data.remainingAmount).toLocaleString()}</Typography>
-                    </Box>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <Box sx={{ border: "1px solid black", borderRadius: 5 ,textAlign:"center"}}>
-                        <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Earning</Typography>
-                        <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>$ {total.markupAmount}</Typography>
-                    </Box>
-                </Grid>
-            </Grid>}
+                {data?.qutationGenerated && <Grid container spacing={2} marginBottom={5}>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
+                            <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Sub Tasks</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>{data.SubTask.length}</Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
+                            <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Pending</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>$ {total.totalAmount.toLocaleString()}</Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
+                            <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Received</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>$ {(total.totalAmount - data.remainingAmount).toLocaleString()}</Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
+                            <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Earning</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>$ {total.markupAmount}</Typography>
+                        </Box>
+                    </Grid>
+                </Grid>}
                 <Grid container spacing={2} marginLeft={2} >
                     <Grid xs={12} sm={5.8}>
                         <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>

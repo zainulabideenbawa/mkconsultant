@@ -69,3 +69,28 @@ export const POST = async (request: NextRequest, { params }: { params: { slug: s
         return NextResponse.json({ error: e.message, status: false }, { status: 400 })
     }
 };
+
+export const PUT = async (request: NextRequest, { params }: { params: { slug: string } }) => {
+    try {
+        const _d = await request.json()
+        const data = await prisma.subTask.update({
+            where:{
+                id:_d.id
+            },
+            data:{
+                payment:_d.payment,
+                transactionType:_d.transactionType
+            }
+        })
+        return NextResponse.json({ status: true, data })
+        // } else {
+        //     throw new Error("Failed to get suppliers")
+        // }
+
+    }
+    catch (e: any) {
+        console.log(e, "error")
+        // return NextResponse.json({ error:"Please Read the Document Carefully there is some parametor is missing"}, { status: 400 })
+        return NextResponse.json({ error: e.message, status: false }, { status: 400 })
+    }
+};

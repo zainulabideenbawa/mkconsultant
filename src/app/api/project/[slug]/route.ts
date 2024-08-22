@@ -14,6 +14,7 @@ export const GET = async (request: NextRequest, { params }: { params: { slug: st
             },
             include: {
                 documents: true,
+                Invoice:true,
                 SubTask: {
                     include: {
                         subContactor: {

@@ -20,6 +20,8 @@ export interface SubTask {
   cost: number;
   vat: number;
   projectId: string;
+  payment: string;
+  transactionType: string;
   subContactor: {
     id: string;
     name: string;
@@ -36,7 +38,7 @@ export interface Client {
   email: string;
   phone: string;
   location: string;
-  project:QuotationData[]
+  project: QuotationData[]
 }
 
 export interface User {
@@ -55,6 +57,8 @@ export interface Material {
   vat: number;
   totalCost: number;
   projectId: string;
+  payment: string;
+  transactionType: string;
   supplier: {
     address: string
     email: string
@@ -87,7 +91,8 @@ export interface QuotationData {
   Material: Material[];
   qutationGenerated: boolean
   documents: Document[]
-  remainingAmount:number
+  remainingAmount: number
+  Invoice: Invoice[]
 }
 
 export interface Document {
@@ -95,4 +100,24 @@ export interface Document {
   name: string,
   url: string,
   projectId: string
+}
+export interface Invoice {
+  Amount: number
+  InvoiceId: number
+  clientId: string
+  createdDate: string
+  dueDate: string
+  id: string
+  projectId: string
+  remarks: string
+  status: string
+  transactionType: string
+}
+
+export enum PROJECTSTATUS {
+  ACTIVE,
+  PENDING,
+  APPROVED,
+  COMPLETED,
+  REJECTED,
 }

@@ -7,7 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MailIcon from '@mui/icons-material/Mail';
-import { Dashboard, CorporateFare, Inventory, Construction, Receipt, Group, Settings, Logout, PersonAdd } from '@mui/icons-material'
+import { Dashboard, CorporateFare, Inventory, Construction, Receipt, Group, Settings, Logout, PersonAdd, BarChart } from '@mui/icons-material'
 import { usePathname,useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react';
 import { SessionData } from '@/types';
@@ -100,6 +100,12 @@ export default function PersistentDrawerLeft({
             name: "Projects",
             icon: <CorporateFare />,
             link: "/dashboard/projects",
+            selected: false
+        },
+        {
+            name: "Finance",
+            icon: <BarChart />,
+            link: "/dashboard/finance",
             selected: false
         },
         {
