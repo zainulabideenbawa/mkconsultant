@@ -31,7 +31,7 @@ const InvoiceForm = () => {
         handleSubmit,
         formState: { errors },
         watch,
-        setValue
+        setValue,
     } = useForm<FormData>({
         resolver: zodResolver(schema)
     });
@@ -106,6 +106,8 @@ const InvoiceForm = () => {
             if (f) {
                 setRemaining(f.remainingAmount - Number(amount))
             }
+        }else{
+            setRemaining(remaintingAmount)
         }
     }, [amount])
     React.useEffect(() => {
@@ -361,14 +363,24 @@ const InvoiceForm = () => {
                                 fullWidth
                                 id="amount"
                                 label="Enter Amount"
-                                {...register('amount')}
+                                {...register('amount',{
+                                    required: 'Amount is required',
+                                    min: {
+                                        value: 1,
+                                        message: 'Amount must be at least 1',
+                                    },
+                                    max: {
+                                        value: remaintingAmount,
+                                        message: `Amount must not exceed ${remaintingAmount}`,
+                                    }
+                                })}
                                 error={!!errors.amount}
-                                // InputProps={{
-                                //     inputProps: {
-                                //         min: 1, // Disable past dates
-                                //         max: total - remaintingAmount
-                                //     }
-                                // }}
+                                InputProps={{
+                                    inputProps: {
+                                        min: 1, // Disable past dates
+                                        max:remaintingAmount
+                                    }
+                                }}
                                 helperText={errors.amount ? errors.amount.message : ''}
                             />
                         </Grid>

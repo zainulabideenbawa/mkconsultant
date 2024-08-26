@@ -236,7 +236,7 @@ const Suppliers = () => {
                                 type="date"
                                 variant="outlined"
                                 margin="normal"
-                                value={new Date(getValues().dateOfBirth)}
+                                // value={new Date(getValues().dateOfBirth)}
                                 required
                                 fullWidth
                                 id="dateOfBirth"

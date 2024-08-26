@@ -10,7 +10,7 @@ const schema = z.object({
     firstName: z.string().min(1, "User Name is required"),
     lastName: z.string().min(1, "User Name is required"),
     email: z.string().email("Invalid email address"),
-    designation: z.string().min(1, "Designation is required"),
+    designation: z.string().optional(),
     role: z.string().min(1, "Designation is required"),
     password: z.string().min(6, "Password must be at least 6 characters long"),
     confirmPassword: z.string().min(6, "Password must be at least 6 characters long")
@@ -37,7 +37,7 @@ const AddUserForm = () => {
         console.log(data,"data")
         const res = await fetch('/api/usermanagement',{
             method:"POST",
-            body:JSON.stringify({...data})
+            body:JSON.stringify({...data,designation:data.designation || ""})
         })
         if(res.ok){
             // console.log(await res.json())

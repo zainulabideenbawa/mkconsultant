@@ -52,8 +52,13 @@ export const POST = async (request: NextRequest) => {
         const _d = await request.json()
         console.log(_d, "body")
         const body = await createProjectSchema.parse(_d)
-        let client = body.clientMainID
-        if (body.clientMainID !== "") {
+        let client = body.clientId
+        const clients = await prisma.client.findFirst({
+            where: {
+                email: body.email
+            }
+        })
+        if (clients) {
             const getClient = await prisma.client.create({
                 data: {
                     name: body.clientName,
@@ -79,7 +84,7 @@ export const POST = async (request: NextRequest) => {
                 clientId: client,
                 materialMarkUp: "0",
                 totalAmount: Number(body.subTasks.reduce((total, subTask) => total + (subTask.addCost + (subTask.vat / 100 * subTask.addCost)), 0)) + Number(body.materials.reduce((total, subTask) => total + subTask.totalCost, 0)),
-                remainingAmount:Number(body.subTasks.reduce((total, subTask) => total + (subTask.addCost + (subTask.vat / 100 * subTask.addCost)), 0)) + Number(body.materials.reduce((total, subTask) => total + subTask.totalCost, 0)),
+                remainingAmount: Number(body.subTasks.reduce((total, subTask) => total + (subTask.addCost + (subTask.vat / 100 * subTask.addCost)), 0)) + Number(body.materials.reduce((total, subTask) => total + subTask.totalCost, 0)),
                 Material: {
                     create: body.materials.map(m => ({
                         material: m.material,

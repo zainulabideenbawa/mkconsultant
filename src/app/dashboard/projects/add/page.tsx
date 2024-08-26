@@ -663,7 +663,7 @@ const ProjectForm = () => {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{material.material}</TableCell>
                                     <TableCell>{material.requiredFor}</TableCell>
-                                    <TableCell>{Suppliers?.find(f => f.id === material.supplier)?.id || ""}</TableCell>
+                                    <TableCell>{Suppliers?.find(f => f.id === material.supplier)?.name || ""}</TableCell>
                                     <TableCell>{material.quantity}</TableCell>
                                     <TableCell>{material.unit}</TableCell>
                                     <TableCell>${Number(material.price).toFixed(2)}</TableCell>

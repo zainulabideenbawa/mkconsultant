@@ -3,14 +3,14 @@ import { Button, Grid, Typography, Paper, TextField, Select, MenuItem, FormContr
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useParams } from "next/navigation";
-import { z } from 'zod';
+import { optional, z } from 'zod';
 import { useEffect, useState } from "react";
 import Swal from 'sweetalert2'
 const schema = z.object({
     firstName: z.string().min(1, "User Name is required"),
     lastName: z.string().min(1, "User Name is required"),
     email: z.string().email("Invalid email address"),
-    designation: z.string().min(1, "Designation is required"),
+    designation: z.string().optional(),
     role: z.string().min(1, "Designation is required"),
     // password: z.string().min(6, "Password must be at least 6 characters long"),
     // confirmPassword: z.string().min(6, "Password must be at least 6 characters long")
@@ -66,7 +66,7 @@ const AddUserForm = () => {
         console.log(data, "data")
         const res = await fetch(`/api/usermanagement/${params.slug}`, {
             method: "PUT",
-            body: JSON.stringify({ ...data })
+            body: JSON.stringify({ ...data,designation:data.designation||"" })
         })
         if (res.ok) {
             // console.log(await res.json())

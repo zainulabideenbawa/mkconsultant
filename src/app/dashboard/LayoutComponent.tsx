@@ -11,6 +11,7 @@ import { Dashboard, CorporateFare, Inventory, Construction, Receipt, Group, Sett
 import { usePathname,useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react';
 import { SessionData } from '@/types';
+import Logo from "@/assets/logo.png"
 
 const drawerWidth = 240;
 
@@ -192,6 +193,7 @@ export default function PersistentDrawerLeft({
                 open={open}
             >
                 <DrawerHeader>
+                    <img src={Logo.src} height={"100px"}/>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
