@@ -204,7 +204,7 @@ const ProjectForm = () => {
                     text: "Project Created Successfully",
                     timer: 3000
                 });
-                // router.replace('/dashboard/subcontractors');
+                router.replace('/dashboard/project');
             } else {
                 Swal.fire({
                     icon: "error",
