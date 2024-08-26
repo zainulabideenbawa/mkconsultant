@@ -52,7 +52,7 @@ export const POST = async (request: NextRequest) => {
         const _d = await request.json()
         console.log(_d, "body")
         const body = await createProjectSchema.parse(_d)
-        let client = body.clientId
+        let client = body.clientMainID
         const clients = await prisma.client.findFirst({
             where: {
                 email: body.email
