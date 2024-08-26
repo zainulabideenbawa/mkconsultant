@@ -7,6 +7,7 @@ import { z } from 'zod';
 import Delete from '@mui/icons-material/Delete'
 
 import Swal from 'sweetalert2';
+import { useRouter } from 'next/navigation';
 
 
 
@@ -55,6 +56,7 @@ type Project = z.infer<typeof projectSchema>;
 
 type FormValues = Omit<Material, 'totalCost'>;
 const ProjectForm = () => {
+    const router = useRouter()
     const [users, setUsers] = useState<{
         id: string;
         email: string;
@@ -204,7 +206,7 @@ const ProjectForm = () => {
                     text: "Project Created Successfully",
                     timer: 3000
                 });
-                router.replace('/dashboard/project');
+                router.replace(`/dashboard/project/view/${_d.data.id}`);
             } else {
                 Swal.fire({
                     icon: "error",
