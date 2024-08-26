@@ -58,7 +58,7 @@ export const POST = async (request: NextRequest) => {
                 email: body.email
             }
         })
-        if (clients) {
+        if (!clients) {
             const getClient = await prisma.client.create({
                 data: {
                     name: body.clientName,
