@@ -7,6 +7,7 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { RemoveRedEye } from '@mui/icons-material';
+import { useRouter } from 'next/navigation';
 
 interface TablePaginationActionsProps {
     count: number;
@@ -20,6 +21,7 @@ interface TablePaginationActionsProps {
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
     const theme = useTheme();
+    
     const { count, page, rowsPerPage, onPageChange } = props;
 
     const handleFirstPageButtonClick = (
@@ -76,6 +78,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 
 export default function DashboardTable({ rows }: {
     rows: {
+        id:string,
         clientName: string,
         date: string,
         project: string,
@@ -83,6 +86,7 @@ export default function DashboardTable({ rows }: {
         status: string,
     }[]
 }) {
+    const router =useRouter()
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -129,7 +133,7 @@ export default function DashboardTable({ rows }: {
                             <TableCell>{row.quote}</TableCell>
                             <TableCell>{row.status === "Pending" ? <Chip label={row.status} color='error' /> : row.status === "Active" ? <Chip label={row.status} color='success' /> : <Chip label={row.status} color='warning' />}</TableCell>
                             <TableCell>
-                                <IconButton>
+                                <IconButton onClick={()=>router.push(`/dashboard/projects/view/${row.id}`)}>
                                     <RemoveRedEye />
                                 </IconButton>
                             </TableCell>

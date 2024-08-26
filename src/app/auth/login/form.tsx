@@ -28,11 +28,11 @@ const LoginPage = () => {
         searchParams.get("error") ? "Invalid Credentials" : ""
     );
     const callbackUrl = "/dashboard";
-    const onSubmit: SubmitHandler<FormData> = data => {
+    const onSubmit: SubmitHandler<FormData> =async data => {
         setLoading(true)
         console.log(data);
         // Handle login logic here
-        signIn('credentials', {
+        await signIn('credentials', {
             ...data,
             callbackUrl
         })
