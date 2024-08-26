@@ -206,7 +206,7 @@ const ProjectForm = () => {
                     text: "Project Created Successfully",
                     timer: 3000
                 });
-                router.replace(`/dashboard/project/view/${_d.data.id}`);
+                router.push(`/dashboard/projects/view/${_d.data.id}`);
             } else {
                 Swal.fire({
                     icon: "error",
