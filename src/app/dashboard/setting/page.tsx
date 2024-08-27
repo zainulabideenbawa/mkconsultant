@@ -207,25 +207,18 @@ const SettingsForm = () => {
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-
-                            <FormControl fullWidth variant="outlined" margin="normal" required>
-                                <InputLabel>Select Designation</InputLabel>
-                                <Select
-                                    label="Select Designation"
+                        <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                disabled
+                                 label="Select Designation"
                                     id="designation"
-                                    value={getValues().designation}
-                                    {...registerUserDetails('designation')}
-                                    error={!!errorsUserDetails.designation}
-                                >
-                                    <MenuItem value="">None</MenuItem>
-                                    <MenuItem value="Admin">Admin</MenuItem>
-                                    <MenuItem value="Manager">Manager</MenuItem>
-                                    <MenuItem value="Developer">Developer</MenuItem>
-                                    <MenuItem value="Designer">Designer</MenuItem>
-                                    <MenuItem value="QA">QA</MenuItem>
-                                </Select>
-                                {errorsUserDetails.designation && <Typography variant="body2" color="error">{errorsUserDetails.designation.message}</Typography>}
-                            </FormControl>
+                                {...registerUserDetails('designation')}
+                                error={!!errorsUserDetails.designation}
+                                helperText={errorsUserDetails.designation ? errorsUserDetails.designation.message : ''}
+                            />
                         </Grid>
                         <Grid item xs={12}>
                             <Button

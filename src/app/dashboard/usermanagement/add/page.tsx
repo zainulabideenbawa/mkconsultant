@@ -117,22 +117,18 @@ const AddUserForm = () => {
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth variant="outlined" margin="normal" required>
-                                <InputLabel>Select Designation</InputLabel>
-                                <Select
-                                    label="Select Designation"
+                        
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                label="Select Designation"
                                     id="designation"
-                                    {...register('designation')}
-                                    error={!!errors.designation}
-                                >
-                                    <MenuItem value="">None</MenuItem>
-                                    <MenuItem value="Manager">Manager</MenuItem>
-                                    <MenuItem value="Developer">Developer</MenuItem>
-                                    <MenuItem value="Designer">Designer</MenuItem>
-                                    <MenuItem value="QA">QA</MenuItem>
-                                </Select>
-                                {errors.designation && <Typography variant="body2" color="error">{errors.designation.message}</Typography>}
-                            </FormControl>
+                                {...register('designation')}
+                                error={!!errors.designation}
+                                helperText={errors.designation ? errors.designation.message : ''}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <FormControl fullWidth variant="outlined" margin="normal" required>

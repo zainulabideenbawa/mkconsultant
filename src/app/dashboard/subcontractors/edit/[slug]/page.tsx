@@ -32,9 +32,12 @@ const Suppliers = () => {
     const params = useParams();
     const [loading, setLoading] = useState(true);
     const [submiting,setSubmiting] = useState(false)
-    const { register, handleSubmit, formState: { errors }, setValue, control,getValues } = useForm<FormData>({
+    const { register, handleSubmit, formState: { errors }, setValue, control,getValues,watch } = useForm<FormData>({
         resolver: zodResolver(schema)
     });
+
+    const [select,setSelect] = useState<string>()
+    const [dob,setDob] = useState<any>()
 
     useEffect(() => {
         if (params.slug) {
@@ -53,12 +56,14 @@ const Suppliers = () => {
             if (_d.status) {
                 const _data = _d.data;
                 console.log(_data, "data from api");
+                let _D = new Date(_data.dateOfBirth)
                 setValue('address', _data.address);
                 setValue('applicantType', _data.applicantType);
                 setValue('approxTeamSize', _data.approxTeamSize);
                 setValue('areasOfWork', _data.areasOfWork);
                 setValue('dailyRate', _data.dailyRate);
-                setValue('dateOfBirth', _data.dateOfBirth);  // Assuming the API returns ISO-8601 date
+                setValue('dateOfBirth', _data.dateOfBirth); 
+                setDob(`${_D.getFullYear()}-${String(_D.getMonth()+1).padStart(2,"0")}-${String(_D.getDate()).padStart(2,"0")}`) // Assuming the API returns ISO-8601 date
                 setValue('email', _data.email);
                 setValue('experiencePartitions', _data.experiencePartitions);
                 setValue('experienceType', _data.experienceType);
@@ -69,6 +74,7 @@ const Suppliers = () => {
                 setValue('phone', _data.phone);
                 setValue('tools', _data.tools);
                 setValue('transport', _data.transport);
+                setSelect(_data.applicantType)
             } else {
                 router.back();
             }
@@ -113,6 +119,7 @@ const Suppliers = () => {
         }
         setSubmiting(false)
     };
+    const dateWatch = watch('dateOfBirth')
 
     const toolsOptions = ["110v Everything", "110v Saws", "110v Drills", "110v Routers", "240v Only", "NONE", "Other"];
     const transportOptions = ["Small Van (Escort Type)", "Midi Van", "Large Van", "NONE", "Other"];
@@ -162,7 +169,7 @@ const Suppliers = () => {
       );
       
       
-      console.log(getValues(),"values" ,new Date(getValues()?.dateOfBirth))
+      console.log(getValues(),"values" ,getValues()?.dateOfBirth,dob)
     if (loading) {
         return (
             <main>
@@ -236,12 +243,13 @@ const Suppliers = () => {
                                 type="date"
                                 variant="outlined"
                                 margin="normal"
-                                // value={new Date(getValues().dateOfBirth)}
+                               value={dob}
                                 required
                                 fullWidth
                                 id="dateOfBirth"
                                 label="Date of Birth"
-                                {...register('dateOfBirth')}
+                                onChange={(e)=>{setDob(e.target.value);setValue('dateOfBirth',new Date(e.target.value).toISOString())}}
+                                // {...register('dateOfBirth')}
                                 error={!!errors.dateOfBirth}
                                 helperText={errors.dateOfBirth ? errors.dateOfBirth.message : ''}
                                 InputLabelProps={{
@@ -255,11 +263,12 @@ const Suppliers = () => {
                                 variant="outlined"
                                 margin="normal"
                                 required
-                                value={getValues().applicantType}
+                                value={select}
+                                onChange={(e)=>{setSelect(e.target.value);setValue('applicantType',e.target.value)}}
                                 fullWidth
                                 id="applicantType"
                                 label="Applicant Type"
-                                {...register('applicantType')}
+                                // {...register('applicantType')}
                                 error={!!errors.applicantType}
                                 helperText={errors.applicantType ? errors.applicantType.message : ''}
                             >

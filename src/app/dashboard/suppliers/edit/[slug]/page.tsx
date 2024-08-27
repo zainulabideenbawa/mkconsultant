@@ -22,6 +22,7 @@ const Suppliers = () => {
     const params = useParams()
     const [loading, setLoading] = useState(true)
     const [submiting,setSubmiting] = useState(false)
+    const [select,setSelect] = useState("")
     console.log(params, "params")
     const {
         register,
@@ -54,6 +55,7 @@ const Suppliers = () => {
                 setValue('notes', _data.notes);
                 setValue('phone', _data.phone);
                 setValue('supplierType', _data.supplierType);
+                setSelect(_data.supplierType)
             } else {
                 router.back();
             }
@@ -183,7 +185,9 @@ const Suppliers = () => {
                                 fullWidth
                                 id="supplierType"
                                 label="Supplier Type"
-                                {...register('supplierType')}
+                                // {...register('supplierType')}
+                                value={select}
+                                onChange={(e)=>{setSelect(e.target.value);setValue("supplierType",e.target.value)}}
                                 error={!!errors.supplierType}
                                 helperText={errors.supplierType ? errors.supplierType.message : ''}
                                 autoFocus

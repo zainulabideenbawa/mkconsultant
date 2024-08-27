@@ -113,7 +113,7 @@ export default function DashboardTable({ rows }: {
                     <TableRow>
                         <TableCell>User Name</TableCell>
                         <TableCell >Email</TableCell>
-                        <TableCell>Desination</TableCell>
+                        <TableCell>Designation</TableCell>
                         <TableCell>User Type</TableCell>
                         <TableCell>Action</TableCell>
                     </TableRow>
