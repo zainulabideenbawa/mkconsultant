@@ -132,9 +132,9 @@ export default function DashboardTable({ rows }: {
                                 <IconButton  onClick={()=>router.push(`/dashboard/usermanagement/edit/${row.id}`)}>
                                     <Edit />
                                 </IconButton>
-                                <IconButton>
+                                {/* <IconButton>
                                     <Delete />
-                                </IconButton>
+                                </IconButton> */}
                             </TableCell>
                         </TableRow>
                     ))}

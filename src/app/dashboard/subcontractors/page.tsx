@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Suppliers = () => {
-    const [orignal,setOrignal] = useState<{
+    const [orignal, setOrignal] = useState<{
         id: string,
         name: string,
         email: string,
@@ -14,9 +14,10 @@ const Suppliers = () => {
         phone: string,
         applicantType: string,
     }[]>([])
-    const [search,setSearch] = useState("")
-    const [loading,setLoading]=useState(true)
-    const [supilerData,setSupilerData]  = useState<{
+    const [search, setSearch] = useState("")
+    const [deleteLoading, setDeleteLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const [supilerData, setSupilerData] = useState<{
         id: string,
         name: string,
         email: string,
@@ -25,7 +26,7 @@ const Suppliers = () => {
         applicantType: string,
     }[]>([])
 
-    
+
     useEffect(() => {
         getData()
     }, [])
@@ -36,7 +37,22 @@ const Suppliers = () => {
             setSupilerData(orignal.filter(f => f.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())))
         }
     }, [search])
+    const deleteFunction = async (id: string) => {
+        setDeleteLoading(true)
+        const res = await fetch('/api/subcontractors', {
+            method: "PUT",
+            body: JSON.stringify({ id })
+        })
+        // The return value is *not* serialized
+        // You can return Date, Map, Set, etc.
 
+        if (!res.ok) {
+
+            throw new Error('Failed to fetch data')
+        }
+        setDeleteLoading(false)
+        getData()
+    }
     async function getData() {
         const res = await fetch('/api/subcontractors', { cache: 'no-store' })
         // The return value is *not* serialized
@@ -52,6 +68,7 @@ const Suppliers = () => {
         setOrignal(body.data)
         setLoading(false)
     }
+
     if (loading) {
         return (
             <main>
@@ -70,7 +87,7 @@ const Suppliers = () => {
                         <Button variant='contained' fullWidth sx={{ flex: 1 }} >Add New Sub-contractor</Button>
                     </Link>
                 </Box>
-                <SuplierTable rows={supilerData} />
+                <SuplierTable rows={supilerData} deleteFunction={deleteFunction} deleteLoading={deleteLoading} />
             </Paper>
         </main>
     )

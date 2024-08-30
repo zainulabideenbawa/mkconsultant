@@ -8,9 +8,9 @@ export const GET = async (request: NextRequest) => {
     try {
         const projectId = await prisma.project.count()
         const clients = await prisma.client.findMany()
-        const subcontractors = await prisma.subContractor.findMany()
+        const subcontractors = await prisma.subContractor.findMany({where:{status:true}})
         const user = await prisma.user.findMany()
-        const supplier = await prisma.supplier.findMany()
+        const supplier = await prisma.supplier.findMany({where:{status:true}})
 
         return NextResponse.json({ status: true, projectId,clients,subcontractors,user,supplier})
     }

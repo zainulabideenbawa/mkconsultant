@@ -6,7 +6,7 @@ const schema = z.object({
     name: z.string().min(3),
     address: z.string().min(3),
     phone: z.string().max(11),
-    email:z.string().email(),
+    email: z.string().email(),
     dateOfBirth: z.string(),
     applicantType: z.string().min(1),
     approxTeamSize: z.string(),
@@ -26,7 +26,7 @@ const schema = z.object({
 export const POST = async (request: NextRequest) => {
     try {
         const _d = await request.json()
-        console.log(_d,"body")
+        console.log(_d, "body")
         const body = await schema.parse(_d)
         const data = await prisma.subContractor.create({
             data: {
@@ -35,7 +35,7 @@ export const POST = async (request: NextRequest) => {
             }
         })
         if (data) {
-           return NextResponse.json({ status: true, data })
+            return NextResponse.json({ status: true, data })
         } else {
             throw new Error("Failed to add new supplier")
         }
@@ -52,7 +52,10 @@ export const POST = async (request: NextRequest) => {
 export const GET = async (request: NextRequest) => {
     try {
         const data = await prisma.subContractor.findMany({
-            select:{
+            where: {
+                status: true
+            },
+            select: {
                 id: true,
                 name: true,
                 email: true,
@@ -62,7 +65,7 @@ export const GET = async (request: NextRequest) => {
             }
         })
         if (data) {
-          return  NextResponse.json({ status: true, data })
+            return NextResponse.json({ status: true, data })
         } else {
             throw new Error("Failed to get suppliers")
         }
@@ -70,6 +73,31 @@ export const GET = async (request: NextRequest) => {
     }
     catch (e: any) {
         console.log(e, "error")
+        // return NextResponse.json({ error:"Please Read the Document Carefully there is some parametor is missing"}, { status: 400 })
+        return NextResponse.json({ error: e.message, status: false }, { status: 400 })
+    }
+};
+
+export const PUT = async (request: NextRequest) => {
+    try {
+        const _d = await request.json()
+        const data = await prisma.subContractor.update({
+            where: {
+                id: _d.id
+            },
+            data: {
+                status: false
+            }
+        })
+        if (data) {
+            return NextResponse.json({ status: true, data })
+        } else {
+            throw new Error("Failed to add new supplier")
+        }
+
+    }
+    catch (e: any) {
+        // console.log(e, "error")
         // return NextResponse.json({ error:"Please Read the Document Carefully there is some parametor is missing"}, { status: 400 })
         return NextResponse.json({ error: e.message, status: false }, { status: 400 })
     }

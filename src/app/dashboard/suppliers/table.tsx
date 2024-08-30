@@ -75,7 +75,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
     );
 }
 
-export default function DashboardTable({ rows }: {
+export default function DashboardTable({ rows,deleteFunction,deleteLoading }: {
     rows: {
         id: string,
         name: string,
@@ -83,7 +83,9 @@ export default function DashboardTable({ rows }: {
         address: string,
         phone: string,
         supplierType: string,
-    }[]
+    }[],
+    deleteFunction:Function,
+    deleteLoading:Boolean
 }) {
     const router = useRouter()
     const [page, setPage] = React.useState(0);
@@ -132,10 +134,10 @@ export default function DashboardTable({ rows }: {
                             <TableCell>{row.phone}</TableCell>
                             <TableCell>{row.supplierType}</TableCell>
                             <TableCell>
-                                <IconButton onClick={()=>router.push(`/dashboard/suppliers/edit/${row.id}`)}>
+                                <IconButton disabled={Boolean(deleteLoading)}  onClick={()=>router.push(`/dashboard/suppliers/edit/${row.id}`)}>
                                     <Edit />
                                 </IconButton>
-                                <IconButton>
+                                <IconButton disabled={Boolean(deleteLoading)} onClick={()=>deleteFunction(row.id)}>
                                     <Delete />
                                 </IconButton>
                             </TableCell>

@@ -37,6 +37,7 @@ model Supplier {
   email        String     @unique
   notes        String?
   material     Material[]
+  status       Boolean   @default(true)
 }
 
 model SubContractor {
@@ -58,6 +59,7 @@ model SubContractor {
   experiencePartitions String[]
   notes                String?
   subTasks             SubTask[]
+  status       Boolean   @default(true)
 }
 
 model Project {

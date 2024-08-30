@@ -42,6 +42,9 @@ export const POST = async (request: NextRequest) => {
 export const GET = async (request: NextRequest) => {
     try {
         const data = await prisma.supplier.findMany({
+            where:{
+                status:true
+            },
             select:{
                 id:true,
                 name:true,
@@ -60,6 +63,32 @@ export const GET = async (request: NextRequest) => {
     }
     catch (e: any) {
         console.log(e, "error")
+        // return NextResponse.json({ error:"Please Read the Document Carefully there is some parametor is missing"}, { status: 400 })
+        return NextResponse.json({ error: e.message, status: false }, { status: 400 })
+    }
+};
+
+
+export const PUT = async (request: NextRequest) => {
+    try {
+        const _d = await request.json()
+        const data = await prisma.supplier.update({
+            where: {
+                id: _d.id
+            },
+            data: {
+                status: false
+            }
+        })
+        if (data) {
+            return NextResponse.json({ status: true, data })
+        } else {
+            throw new Error("Failed to add new supplier")
+        }
+
+    }
+    catch (e: any) {
+        // console.log(e, "error")
         // return NextResponse.json({ error:"Please Read the Document Carefully there is some parametor is missing"}, { status: 400 })
         return NextResponse.json({ error: e.message, status: false }, { status: 400 })
     }

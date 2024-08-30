@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 const Suppliers = () => {
     const [loading, setLoading] = useState(true)
     const [search,setSearch] = useState("")
+    const [deleteLoading, setDeleteLoading] = useState(false)
     const [orignal, setOrignal] = useState<{
         id: string,
         name: string,
@@ -36,6 +37,22 @@ const Suppliers = () => {
             setSupilerData(orignal.filter(f => f.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())))
         }
     }, [search])
+    const deleteFunction = async (id: string) => {
+        setDeleteLoading(true)
+        const res = await fetch('/api/suppiler', {
+            method: "PUT",
+            body: JSON.stringify({ id })
+        })
+        // The return value is *not* serialized
+        // You can return Date, Map, Set, etc.
+
+        if (!res.ok) {
+
+            throw new Error('Failed to fetch data')
+        }
+        setDeleteLoading(false)
+        getData()
+    }
 
     async function getData() {
         const res = await fetch('/api/suppiler', { cache: 'no-store' })
@@ -70,7 +87,7 @@ const Suppliers = () => {
                         <Button variant='contained' fullWidth sx={{ flex: 1 }} >Add Suplier</Button>
                     </Link>
                 </Box>
-                <SuplierTable rows={supilerData} />
+                <SuplierTable rows={supilerData} deleteFunction={deleteFunction} deleteLoading={deleteLoading} />
             </Paper>
         </main>
     )
