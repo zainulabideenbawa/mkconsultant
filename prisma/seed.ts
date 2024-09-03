@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { hash } from 'bcrypt'
 
+
 const prisma = new PrismaClient()
 
 async function main() {
@@ -18,6 +19,7 @@ async function main() {
     },
   })
   console.log({ user })
+
 }
 main()
   .then(() => prisma.$disconnect())
