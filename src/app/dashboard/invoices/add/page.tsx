@@ -243,7 +243,7 @@ const InvoiceForm = () => {
             tableRow({
                 no: 1,
                 description: `Project ID - ${String(_p?.projectId).padStart(6, '0')}, ${_p?.name}`,
-                price: `$ ${Number(data.amount).toLocaleString()}`
+                price: `€ ${Number(data.amount).toLocaleString()}`
             })
             footer(page);
         };
@@ -251,7 +251,7 @@ const InvoiceForm = () => {
         const addProjectDetailsAndPaymentMethod = () => {
             const startY = margin + headerHeight + 150;
             doc.setFontSize(12);
-            doc.text(`Total Amount : $ ${total.toLocaleString()}`, pageWidth - margin - 60, startY + 20);
+            doc.text(`Total Amount : € ${total.toLocaleString()}`, pageWidth - margin - 60, startY + 20);
         };
 
         let page = 1;
