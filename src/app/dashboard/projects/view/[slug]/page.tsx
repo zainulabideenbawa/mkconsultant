@@ -433,7 +433,7 @@ const Projects = () => {
         };
 
         const addTableContent = () => {
-            const startY = margin + headerHeight + 20;
+            const startY = margin + headerHeight + 40;
             let currentY = startY;
             let page = 1;
             let rowIndex = 0;
@@ -539,7 +539,7 @@ const Projects = () => {
         };
 
         const addTableContent = () => {
-            const startY = margin + headerHeight + 20;
+            const startY = margin + headerHeight + 40;
             let currentY = startY;
             let page = 1;
             let rowIndex = 0;
@@ -548,8 +548,8 @@ const Projects = () => {
                 doc.setFontSize(12);
                 doc.text('Task Id', margin, currentY);
                 doc.text('Task Name', margin + 20, currentY);
-                doc.text('Start Date', pageWidth - margin - 60, currentY);
-                doc.text('End Date', pageWidth - margin - 40, currentY);
+                doc.text('Start Date', pageWidth - margin - 100, currentY);
+                doc.text('End Date', pageWidth - margin - 60, currentY);
                 doc.text('Cost', pageWidth - margin - 20, currentY);
                 currentY += 10;
             };
@@ -557,8 +557,8 @@ const Projects = () => {
             const tableRow = (row: any) => {
                 doc.text(`${row.no}`, margin, currentY);
                 doc.text(`${row.description}`, margin + 20, currentY);
-                doc.text(`${row.qty}`, pageWidth - margin - 60, currentY);
-                doc.text(`${row.price}`, pageWidth - margin - 40, currentY);
+                doc.text(`${row.qty}`, pageWidth - margin - 100, currentY);
+                doc.text(`${row.price}`, pageWidth - margin - 60, currentY);
                 doc.text(`${row.total}`, pageWidth - margin - 20, currentY);
                 currentY += 10;
             };
@@ -598,7 +598,7 @@ const Projects = () => {
         addTableContent();
         addProjectDetailsAndPaymentMethod();
         setSubmiting(false)
-        doc.save(`workorer - ${work.name} - ${data?.projectId}.pdf`);
+        doc.save(`workorder - ${work.name} - ${data?.projectId}.pdf`);
 
     };
     const getSupplierRequest = async (work: GroupedMaterialsBySupplier) => {
@@ -663,7 +663,7 @@ const Projects = () => {
         };
 
         const addTableContent = () => {
-            const startY = margin + headerHeight + 20;
+            const startY = margin + headerHeight + 40;
             let currentY = startY;
             let page = 1;
             let rowIndex = 0;
