@@ -87,72 +87,161 @@ export default function PersistentDrawerLeft({
     const handleListItemClick = (route: string) => {
         router.push(route);
     };
+    
+    const [listofdrawer, setlistofdrawer] = React.useState<{
+        name:String,
+        icon: React.ReactElement,
+        link: string,
+        selected: boolean,
+        func:null|Function
+    }[]>([])
+    React.useLayoutEffect(()=>{
+        if(session?.user){
+            if(session.user.role === "USER"){
+                setlistofdrawer([
+                    {
+                        name: "Dashboard",
+                        icon: <Dashboard />,
+                        link: "/dashboard",
+                        selected: true,
+                        func:null
+                    },
+                    {
+                        name: "Projects",
+                        icon: <CorporateFare />,
+                        link: "/dashboard/projects",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Suppliers",
+                        icon: <Inventory />,
+                        link: "/dashboard/suppliers",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Sub-Contractors",
+                        icon: <Construction />,
+                        link: "/dashboard/subcontractors",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Invoices",
+                        icon: <Receipt />,
+                        link: "/dashboard/invoices",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Clients",
+                        icon: <Group />,
+                        link: "/dashboard/clients",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Settings",
+                        icon: <Settings />,
+                        link: "/dashboard/setting",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "User Management",
+                        icon: <PersonAdd />,
+                        link: "/dashboard/usermanagement",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Log Out",
+                        icon: <Logout />,
+                        link: "/dashboard",
+                        selected: false,
+                        func:()=>signOut()
+                    }
+                ])
+            }else{
+                setlistofdrawer([
+                    {
+                        name: "Dashboard",
+                        icon: <Dashboard />,
+                        link: "/dashboard",
+                        selected: true,
+                        func:null
+                    },
+                    {
+                        name: "Projects",
+                        icon: <CorporateFare />,
+                        link: "/dashboard/projects",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Finance",
+                        icon: <BarChart />,
+                        link: "/dashboard/finance",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Suppliers",
+                        icon: <Inventory />,
+                        link: "/dashboard/suppliers",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Sub-Contractors",
+                        icon: <Construction />,
+                        link: "/dashboard/subcontractors",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Invoices",
+                        icon: <Receipt />,
+                        link: "/dashboard/invoices",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Clients",
+                        icon: <Group />,
+                        link: "/dashboard/clients",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Settings",
+                        icon: <Settings />,
+                        link: "/dashboard/setting",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "User Management",
+                        icon: <PersonAdd />,
+                        link: "/dashboard/usermanagement",
+                        selected: false,
+                        func:null
+                    },
+                    {
+                        name: "Log Out",
+                        icon: <Logout />,
+                        link: "/dashboard",
+                        selected: false,
+                        func:()=>signOut()
+                    }
+                ])
+            }
+        }
+    },[session])
     React.useEffect(()=>{
         setlistofdrawer(listofdrawer.map(item=>({...item,selected:item.link===path})))
     },[path])
-    const [listofdrawer, setlistofdrawer] = React.useState([
-        {
-            name: "Dashboard",
-            icon: <Dashboard />,
-            link: "/dashboard",
-            selected: true
-        },
-        {
-            name: "Projects",
-            icon: <CorporateFare />,
-            link: "/dashboard/projects",
-            selected: false
-        },
-        {
-            name: "Finance",
-            icon: <BarChart />,
-            link: "/dashboard/finance",
-            selected: false
-        },
-        {
-            name: "Suppliers",
-            icon: <Inventory />,
-            link: "/dashboard/suppliers",
-            selected: false
-        },
-        {
-            name: "Sub-Contractors",
-            icon: <Construction />,
-            link: "/dashboard/subcontractors",
-            selected: false
-        },
-        {
-            name: "Invoices",
-            icon: <Receipt />,
-            link: "/dashboard/invoices",
-            selected: false
-        },
-        {
-            name: "Clients",
-            icon: <Group />,
-            link: "/dashboard/clients",
-            selected: false
-        },
-        {
-            name: "Settings",
-            icon: <Settings />,
-            link: "/dashboard/setting",
-            selected: false
-        },
-        {
-            name: "User Management",
-            icon: <PersonAdd />,
-            link: "/dashboard/usermanagement",
-            selected: false
-        },
-        {
-            name: "Log Out",
-            icon: <Logout />,
-            link: "/dashboard",
-            selected: false,
-            func:()=>signOut()
-        }
-    ])
 
     return (
         <Box sx={{ display: 'flex' }}>

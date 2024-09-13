@@ -243,7 +243,7 @@ const InvoiceForm = () => {
             tableRow({
                 no: 1,
                 description: `Project ID - ${String(_p?.projectId).padStart(6, '0')}, ${_p?.name}`,
-                price: `€ ${Number(data.amount).toLocaleString()}`
+                price: `£ ${Number(data.amount).toLocaleString()}`
             })
             footer(page);
         };
@@ -251,7 +251,7 @@ const InvoiceForm = () => {
         const addProjectDetailsAndPaymentMethod = () => {
             const startY = margin + headerHeight + 150;
             doc.setFontSize(12);
-            doc.text(`Total Amount : € ${total.toLocaleString()}`, pageWidth - margin - 60, startY + 20);
+            doc.text(`Total Amount : £ ${total.toLocaleString()}`, pageWidth - margin - 60, startY + 20);
         };
 
         let page = 1;
@@ -356,11 +356,12 @@ const InvoiceForm = () => {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
                             <TextField
-                                type="number"
+                                // type="number"
                                 variant="outlined"
                                 margin="normal"
                                 required
                                 fullWidth
+                                
                                 id="amount"
                                 label="Enter Amount"
                                 {...register('amount',{
@@ -382,6 +383,13 @@ const InvoiceForm = () => {
                                     }
                                 }}
                                 helperText={errors.amount ? errors.amount.message : ''}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    // Allow only numbers and a single decimal point
+                                    if (/^\d*\.?\d*$/.test(value)) {
+                                      setValue('amount',value)// Keep value as a string
+                                    }
+                                  }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>

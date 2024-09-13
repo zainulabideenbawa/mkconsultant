@@ -19,8 +19,8 @@ const subTaskSchema = z.object({
     assignTo: z.string().nonempty('Assign To is required'),
     startDate: z.string().nonempty('Start Date is required'),
     endDate: z.string().nonempty('End Date is required'),
-    addCost: z.number().positive('Cost must be a positive number').optional(),
-    vat: z.number().positive('VAT must be a positive number').optional(),
+    addCost: z.string().optional(),
+    vat: z.string().optional(),
 });
 const projectSchema = z.object({
     projectId: z.string().nonempty('Project ID is required'),
@@ -48,9 +48,9 @@ type Material = {
     supplier: string;
     quantity: number;
     unit: string;
-    price: number;
-    vat: number;
-    totalCost: number;
+    price: string;
+    vat: string;
+    totalCost: string;
 };
 type Project = z.infer<typeof projectSchema>;
 
@@ -118,7 +118,7 @@ const ProjectForm = () => {
     const { control, handleSubmit, setValue, watch, register, formState: { errors }, getValues } = useForm<Project>({
         resolver: zodResolver(projectSchema),
         defaultValues: {
-            subTasks: [{ subTaskId: '', subTaskName: '', description: '', assignTo: '', startDate: '', endDate: '', addCost: 0, vat: 0 }],
+            subTasks: [{ subTaskId: '', subTaskName: '', description: '', assignTo: '', startDate: '', endDate: '', addCost: '0', vat: '0' }],
         },
     });
     React.useLayoutEffect(() => {
@@ -162,20 +162,20 @@ const ProjectForm = () => {
     const today = new Date().toISOString().split('T')[0];
     const onSubmitMaterial = (data: FormValues) => {
         console.log(data, "data", getValues())
-        const totalCost = data.quantity * data.price * (1 + data.vat / 100);
+        const totalCost = Number(data.quantity * Number(Number(data.price).toFixed(2)) * (1 + Number(Number(data.vat).toFixed(2)) / 100)).toFixed(2);
         setMaterials([...materials, { ...data, totalCost }]);
         reset();
         setMaterialValue('material', "")
-        setMaterialValue('price', 0)
+        setMaterialValue('price', "0")
         setMaterialValue('quantity', 0)
         setMaterialValue('requiredFor', "")
         setMaterialValue('supplier', "")
         setMaterialValue('unit', "")
-        setMaterialValue('vat', 0)
+        setMaterialValue('vat', "0")
     };
 
     const calculateGrandTotal = () => {
-        return materials.reduce((acc, material) => acc + material.totalCost, 0);
+        return materials.reduce((acc, material) => acc + Number(Number(material.totalCost).toFixed(2)), 0);
     };
     console.log(Number(getValues().clientId), "Number(getValues().clientId)")
     const submitProject = async () => {
@@ -185,7 +185,7 @@ const ProjectForm = () => {
             materials: materials.map(m => ({
                 ...m,
                 quantity: Number(m.quantity),
-                vat: Number(m.vat),
+                vat: String(m.vat),
                 price: Number(m.price).toFixed(3),
                 totalCost: Number(m.totalCost).toFixed(3)
 
@@ -234,7 +234,7 @@ const ProjectForm = () => {
     }
     return (
         !showMaterial ? <main>
-            <Typography variant='h4' sx={{ fontWeight: "bold", marginBottom: 4 }}>Add New Suppliers</Typography>
+            <Typography variant='h4' sx={{ fontWeight: "bold", marginBottom: 4 }}>Add New Project</Typography>
             <Paper sx={{ padding: 4 }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
@@ -468,12 +468,18 @@ const ProjectForm = () => {
                                                 render={({ field }) => (
                                                     <TextField
                                                         label="Add Cost"
-                                                        type="number"
+                                                        // type="number"
                                                         {...field}
                                                         fullWidth
                                                         error={!!errors.subTasks?.[index]?.addCost}
                                                         helperText={errors.subTasks?.[index]?.addCost?.message}
-                                                        onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value;
+                                                            // Allow only numbers and a single decimal point
+                                                            if (/^\d*\.?\d*$/.test(value)) {
+                                                              field.onChange(value); // Keep value as a string
+                                                            }
+                                                          }}
                                                     />
                                                 )}
                                             />
@@ -485,12 +491,18 @@ const ProjectForm = () => {
                                                 render={({ field }) => (
                                                     <TextField
                                                         label="VAT"
-                                                        type="number"
+                                                        // type="number"
                                                         {...field}
                                                         fullWidth
                                                         error={!!errors.subTasks?.[index]?.vat}
                                                         helperText={errors.subTasks?.[index]?.vat?.message}
-                                                        onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value;
+                                                            // Allow only numbers and a single decimal point
+                                                            if (/^\d*\.?\d*$/.test(value)) {
+                                                              field.onChange(value); // Keep value as a string
+                                                            }
+                                                          }}
                                                     />
                                                 )}
                                             />
@@ -512,7 +524,7 @@ const ProjectForm = () => {
                             <Button
                                 variant='outlined'
                                 onClick={() => {
-                                    append({ subTaskId: '', subTaskName: '', description: '', assignTo: '', startDate: '', endDate: '', addCost: 0, vat: 0 })
+                                    append({ subTaskId: '', subTaskName: '', description: '', assignTo: '', startDate: '', endDate: '', addCost: "0", vat: "0" })
                                     setValue(`subTasks.${Number(getValues().subTasks?.length || 1) - 1 as unknown as number}.subTaskId`, `${String(Number(getValues().projectId)).padStart(6, '0')} - ${String(Number(getValues().subTasks?.length)).padStart(3, '0')}`)
                                 }}
                             >
@@ -610,10 +622,17 @@ const ProjectForm = () => {
                                         {...field}
                                         fullWidth
                                         label="Price"
-                                        type="number"
-                                        InputProps={{ inputProps: { min: 0 } }}
+                                        // type="number"
+                                        // InputProps={{ inputProps: { min: 0 } }}
                                         error={!!errorsMaterial.price}
                                         helperText={errorsMaterial.price?.message}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            // Allow only numbers and a single decimal point
+                                            if (/^\d*\.?\d*$/.test(value)) {
+                                              field.onChange(value); // Keep value as a string
+                                            }
+                                          }}
                                     />
                                 )}
                             />
@@ -627,10 +646,17 @@ const ProjectForm = () => {
                                         {...field}
                                         fullWidth
                                         label="VAT%"
-                                        type="number"
-                                        InputProps={{ inputProps: { min: 0, max: 100 } }}
+                                        // type="number"
+                                        // InputProps={{ inputProps: { min: 0, max: 100 } }}
                                         error={!!errorsMaterial.vat}
                                         helperText={errorsMaterial.vat?.message}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            // Allow only numbers and a single decimal point
+                                            if (/^\d*\.?\d*$/.test(value)) {
+                                              field.onChange(value); // Keep value as a string
+                                            }
+                                          }}
                                     />
                                 )}
                             />
@@ -686,7 +712,7 @@ const ProjectForm = () => {
                 </TableContainer>
 
                 <Box mt={2}>
-                    <Button variant="contained" color="primary" fullWidth onClick={submitProject}>
+                    <Button disabled={submiting} variant="contained" color="primary" fullWidth onClick={submitProject}>
                         {
                             submiting ? <CircularProgress /> : "Save Project & Generate Quotation"
                         }

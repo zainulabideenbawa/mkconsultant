@@ -13,7 +13,7 @@ const schema = z.object({
     phone: z.string().regex(/^\d+$/, "Phone number must contain only digits").length(11, "Phone number must be exactly 11 digits"),
     email: z.string().email(),
     supplierType: z.string(),
-    markup: z.number().max(100).min(0),
+    // markup: z.number().max(100).min(0),
     notes: z.string().optional()
 });
 type FormData = z.infer<typeof schema>;
@@ -50,7 +50,7 @@ const Suppliers = () => {
                 console.log(_data, "data from api");
                 setValue('name', _data.name);
                 setValue('email', _data.email);
-                setValue('markup', Number(_data.markup)); // Convert markup to number
+                // setValue('markup', Number(_data.markup)); // Convert markup to number
                 setValue('address', _data.address);
                 setValue('notes', _data.notes);
                 setValue('phone', _data.phone);
@@ -70,7 +70,7 @@ const Suppliers = () => {
         console.log(data, "data")
         const res = await fetch(`/api/suppiler/${params.slug}`, {
             method: "PUT",
-            body: JSON.stringify({ ...data })
+            body: JSON.stringify({ ...data,markup:0 })
         })
         if (res.ok) {
             // console.log(await res.json())
@@ -198,7 +198,7 @@ const Suppliers = () => {
                                 ))}
                             </TextField>
                         </Grid>
-                        <Grid xs={12} sm={6} md={4} >
+                        {/* <Grid xs={12} sm={6} md={4} >
                             <TextField
                                 variant="outlined"
                                 margin="normal"
@@ -213,7 +213,7 @@ const Suppliers = () => {
                                 inputProps={{ min: 0, max: 100, step: 1 }}
                                 autoFocus
                             />
-                        </Grid>
+                        </Grid> */}
                         <Grid xs={12}  >
                             <TextField
                                 variant="outlined"

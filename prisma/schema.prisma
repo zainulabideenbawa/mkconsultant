@@ -79,8 +79,8 @@ model Project {
   SubTask           SubTask[]
   Material          Material[]
   status            PROJECTSTATUS @default(PENDING)
-  totalAmount       Int           @default(0)
-  remainingAmount   Int           @default(0)
+  totalAmount       Float           @default(0)
+  remainingAmount   Float           @default(0)
   qutationGenerated Boolean       @default(false)
   Invoice           Invoice[]
   documents         documents[]
@@ -122,8 +122,8 @@ model SubTask {
   subContactor       SubContractor @relation(fields: [assingTo], references: [id])
   startDate          DateTime
   endDate            DateTime
-  cost               Int
-  vat                Int
+  cost               Float
+  vat                Float
   Project            Project?      @relation(fields: [projectId], references: [id])
   projectId          String?
   workorderGenerated Boolean       @default(false)

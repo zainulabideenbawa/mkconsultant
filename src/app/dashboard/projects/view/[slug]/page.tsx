@@ -458,7 +458,7 @@ const Projects = () => {
             tableRow({
                 no: 1,
                 description: `Project ID - ${String(data?.projectId).padStart(6, '0')}, ${data?.name}`,
-                price: `€ ${Number(total.subTaskAmount + total.materialAmount + total.markupAmount).toLocaleString()}`
+                price: `£ ${Number(total.subTaskAmount + total.materialAmount + total.markupAmount).toLocaleString()}`
             })
             footer(page);
         };
@@ -466,9 +466,9 @@ const Projects = () => {
         const addProjectDetailsAndPaymentMethod = () => {
             const startY = margin + headerHeight + 150;
             doc.setFontSize(12);
-            doc.text(`SubTotal :     € ${Number(total.subTaskAmount + total.materialAmount + total.markupAmount).toLocaleString()}`, pageWidth - margin - 60, startY);
-            doc.text(`VAT:           € ${total.vat.toLocaleString()}`, pageWidth - margin - 60, startY + 10);
-            doc.text(`Total Amount : € ${total.totalAmount.toLocaleString()}`, pageWidth - margin - 60, startY + 20);
+            doc.text(`SubTotal :     £ ${Number(total.subTaskAmount + total.materialAmount + total.markupAmount).toLocaleString()}`, pageWidth - margin - 60, startY);
+            doc.text(`VAT:           £ ${total.vat.toLocaleString()}`, pageWidth - margin - 60, startY + 10);
+            doc.text(`Total Amount : £ ${total.totalAmount.toLocaleString()}`, pageWidth - margin - 60, startY + 20);
         };
 
         let page = 1;
@@ -578,7 +578,7 @@ const Projects = () => {
                     description: row.name,
                     qty: new Date(row.startDate).toLocaleDateString(),
                     price: new Date(row.endDate).toLocaleDateString(),
-                    total: `€ ${row.cost.toLocaleString()}`
+                    total: `£ ${row.cost.toLocaleString()}`
                 });
             });
 
@@ -588,9 +588,9 @@ const Projects = () => {
         const addProjectDetailsAndPaymentMethod = () => {
             const startY = margin + headerHeight + 150;
             doc.setFontSize(12);
-            doc.text(`SubTotal :     € ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost), 0)).toLocaleString()}`, pageWidth - margin - 60, startY);
-            doc.text(`VAT:           € ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost * (subTask.vat / 100)), 0)).toLocaleString()}`, pageWidth - margin - 60, startY + 10);
-            doc.text(`Total Amount : € ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost + (subTask.vat / 100 * subTask.cost)), 0)).toLocaleString()}`, pageWidth - margin - 60, startY + 20);
+            doc.text(`SubTotal :     £ ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost), 0)).toLocaleString()}`, pageWidth - margin - 60, startY);
+            doc.text(`VAT:           £ ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost * (subTask.vat / 100)), 0)).toLocaleString()}`, pageWidth - margin - 60, startY + 10);
+            doc.text(`Total Amount : £ ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost + (subTask.vat / 100 * subTask.cost)), 0)).toLocaleString()}`, pageWidth - margin - 60, startY + 20);
         };
 
         let page = 1;
@@ -711,9 +711,9 @@ const Projects = () => {
         // const addProjectDetailsAndPaymentMethod = () => {
         //     const startY = margin + headerHeight + 150;
         //     doc.setFontSize(12);
-        //     doc.text(`SubTotal :     € ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost), 0)).toLocaleString()}`, pageWidth - margin - 60, startY);
-        //     doc.text(`VAT:           € ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost*(subTask.vat/100)), 0)).toLocaleString()}`, pageWidth - margin - 60, startY + 10);
-        //     doc.text(`Total Amount : € ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost + (subTask.vat / 100 * subTask.cost)), 0)).toLocaleString()}`, pageWidth - margin - 60, startY + 20);
+        //     doc.text(`SubTotal :     £ ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost), 0)).toLocaleString()}`, pageWidth - margin - 60, startY);
+        //     doc.text(`VAT:           £ ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost*(subTask.vat/100)), 0)).toLocaleString()}`, pageWidth - margin - 60, startY + 10);
+        //     doc.text(`Total Amount : £ ${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost + (subTask.vat / 100 * subTask.cost)), 0)).toLocaleString()}`, pageWidth - margin - 60, startY + 20);
         // };
 
         let page = 1;
@@ -872,19 +872,19 @@ const Projects = () => {
                     <Grid item xs={12} sm={6} md={3}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Pending</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>€ {total.totalAmount.toLocaleString()}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {total.totalAmount.toLocaleString()}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Received</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>€ {(total.totalAmount - data.remainingAmount).toLocaleString()}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Math.abs(Number(total.totalAmount - data.remainingAmount)).toLocaleString()}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Earning</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>€ {total.markupAmount}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {total.markupAmount}</Typography>
                         </Box>
                     </Grid>
                 </Grid>}

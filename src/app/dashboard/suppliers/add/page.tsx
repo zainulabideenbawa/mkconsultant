@@ -13,7 +13,7 @@ const schema = z.object({
     phone: z.string().regex(/^\d+$/, "Phone number must contain only digits").length(11, "Phone number must be exactly 11 digits"),
     email:z.string().email(),
     supplierType: z.string(),
-    markup:  z.number().max(100).min(0),
+    // markup:  z.number().max(100).min(0),
     notes: z.string().optional()
 });
 type FormData = z.infer<typeof schema>;
@@ -32,7 +32,7 @@ const Suppliers = () => {
         console.log(data,"data")
         const res = await fetch('/api/suppiler',{
             method:"POST",
-            body:JSON.stringify({...data})
+            body:JSON.stringify({...data,markup:0})
         })
         if(res.ok){
             // console.log(await res.json())
@@ -149,7 +149,7 @@ const Suppliers = () => {
                                 {["Concrete Supplier", "Steel Supplier", "Wood Supplier", "Glass Supplier", "Heavy Machinery Supplier"].map((v, i) => <MenuItem value={v} key={i}>{v}</MenuItem>)}
                             </TextField>
                         </Grid>
-                        <Grid xs={12} sm={6} md={4} >
+                        {/* <Grid xs={12} sm={6} md={4} >
                             <TextField
                                 variant="outlined"
                                 margin="normal"
@@ -164,7 +164,7 @@ const Suppliers = () => {
                                 inputProps={{ min: 0, max: 100, step: 1 }}
                                 autoFocus
                             />
-                        </Grid>
+                        </Grid> */}
                         <Grid xs={12}  >
                             <TextField
                                 variant="outlined"

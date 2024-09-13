@@ -10,8 +10,8 @@ const subTaskSchema = z.object({
     assignTo: z.string(),
     startDate: z.string().transform(x => new Date(x).toISOString()), // Assuming these are coming in as ISO strings
     endDate: z.string().transform(x => new Date(x).toISOString()),
-    addCost: z.number(),
-    vat: z.number(),
+    addCost: z.string().transform(v => parseFloat(v)),
+    vat: z.string().transform(v => parseFloat(v)),
 });
 
 const materialSchema = z.object({
@@ -21,7 +21,7 @@ const materialSchema = z.object({
     quantity: z.number(),
     unit: z.string(),
     price: z.string().transform(v => parseFloat(v)),
-    vat: z.number(),
+    vat: z.string().transform(v => parseFloat(v)),
     totalCost: z.string().transform(v => parseFloat(v)),
 });
 

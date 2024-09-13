@@ -32,11 +32,11 @@ export default function Home() {
     },
     {
       title: "Earnings",
-      number: "€ 0",
+      number: "£ 0",
     },
     {
       title: "Revenue",
-      number: "€ 0",
+      number: "£ 0",
     },
 
   ])
@@ -87,11 +87,11 @@ export default function Home() {
       },
       {
         title: "Earnings",
-        number: `€ ${Number(body.earning).toFixed(0)}`,
+        number: `£ ${Number(body.earning).toFixed(0)}`,
       },
       {
         title: "Revenue",
-        number: `€ ${body.total}`,
+        number: `£ ${body.total}`,
       },
 
     ])
@@ -107,7 +107,7 @@ export default function Home() {
       clientName: m.client.name,
       date: `${new Date(m.startDate).toLocaleDateString()}`,
       project: 'Call',
-      quote: `€ ${m.totalAmount}`,
+      quote: `£ ${m.totalAmount}`,
       status: m.status
     })))
     setLoading(false)
@@ -201,7 +201,7 @@ export default function Home() {
         tableRow({
             no: 1,
             description: `Project ID - ${String(_p?.projectId).padStart(6, '0')}, ${_p?.name}`,
-            price: `€ ${Number(data.Amount).toLocaleString()}`
+            price: `£ ${Number(data.Amount).toLocaleString()}`
         })
         footer(page);
     };
@@ -209,7 +209,7 @@ export default function Home() {
     const addProjectDetailsAndPaymentMethod = () => {
         const startY = margin + headerHeight + 150;
         doc.setFontSize(12);
-        doc.text(`Total Amount : € ${data.Amount.toLocaleString()}`, pageWidth - margin - 60, startY + 20);
+        doc.text(`Total Amount : £ ${data.Amount.toLocaleString()}`, pageWidth - margin - 60, startY + 20);
     };
 
     let page = 1;
