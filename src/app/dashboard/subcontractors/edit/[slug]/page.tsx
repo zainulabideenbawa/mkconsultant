@@ -31,13 +31,15 @@ const Suppliers = () => {
     const router = useRouter();
     const params = useParams();
     const [loading, setLoading] = useState(true);
-    const [submiting,setSubmiting] = useState(false)
-    const { register, handleSubmit, formState: { errors }, setValue, control,getValues,watch } = useForm<FormData>({
+    const [submiting, setSubmiting] = useState(false)
+    const { register, handleSubmit, formState: { errors }, setValue, control, getValues, watch } = useForm<FormData>({
         resolver: zodResolver(schema)
     });
 
-    const [select,setSelect] = useState<string>()
-    const [dob,setDob] = useState<any>()
+    const [select, setSelect] = useState<string>()
+    const [tax, setTax] = useState<string>()
+
+    const [dob, setDob] = useState<any>()
 
     useEffect(() => {
         if (params.slug) {
@@ -49,7 +51,7 @@ const Suppliers = () => {
 
     const getSupplier = async (slug: any) => {
         setLoading(true);
-        
+
         const res = await fetch(`/api/subcontractors/${slug}`);
         if (res.ok) {
             const _d = await res.json();
@@ -62,8 +64,8 @@ const Suppliers = () => {
                 setValue('approxTeamSize', _data.approxTeamSize);
                 setValue('areasOfWork', _data.areasOfWork);
                 setValue('dailyRate', _data.dailyRate);
-                setValue('dateOfBirth', _data.dateOfBirth); 
-                setDob(`${_D.getFullYear()}-${String(_D.getMonth()+1).padStart(2,"0")}-${String(_D.getDate()).padStart(2,"0")}`) // Assuming the API returns ISO-8601 date
+                setValue('dateOfBirth', _data.dateOfBirth);
+                setDob(`${_D.getFullYear()}-${String(_D.getMonth() + 1).padStart(2, "0")}-${String(_D.getDate()).padStart(2, "0")}`) // Assuming the API returns ISO-8601 date
                 setValue('email', _data.email);
                 setValue('experiencePartitions', _data.experiencePartitions);
                 setValue('experienceType', _data.experienceType);
@@ -75,6 +77,7 @@ const Suppliers = () => {
                 setValue('tools', _data.tools);
                 setValue('transport', _data.transport);
                 setSelect(_data.applicantType)
+                setTax(_data.taxStatus)
             } else {
                 router.back();
             }
@@ -131,45 +134,45 @@ const Suppliers = () => {
         label: string,
         options: string[],
         name: keyof FormData // Explicitly typing the 'name' parameter
-      ) => (
+    ) => (
         <Box sx={{ padding: 2, border: '1px solid #ccc', borderRadius: 1, marginBottom: 2 }}>
-          <Typography variant='h6'>{label}</Typography>
-          <FormGroup row>
-            {options.map((option, index) => (
-              <FormControlLabel
-                key={index}
-                control={
-                  <Controller
-                    name={name}
-                    control={control}
-                    render={({ field }) => (
-                      <Checkbox
-                        {...field}
-                        checked={Array.isArray(field.value) && field.value.includes(option)} // Ensure field.value is an array
-                        onChange={() => {
-                          if (Array.isArray(field.value)) {
-                            const newValue = field.value.includes(option)
-                              ? field.value.filter((v: string) => v !== option)
-                              : [...field.value, option];
-                            field.onChange(newValue);
-                          } else {
-                            field.onChange([option]); // Initialize with the first option if not an array
-                          }
-                        }}
-                        value={option}
-                      />
-                    )}
-                  />
-                }
-                label={option}
-              />
-            ))}
-          </FormGroup>
+            <Typography variant='h6'>{label}</Typography>
+            <FormGroup row>
+                {options.map((option, index) => (
+                    <FormControlLabel
+                        key={index}
+                        control={
+                            <Controller
+                                name={name}
+                                control={control}
+                                render={({ field }) => (
+                                    <Checkbox
+                                        {...field}
+                                        checked={Array.isArray(field.value) && field.value.includes(option)} // Ensure field.value is an array
+                                        onChange={() => {
+                                            if (Array.isArray(field.value)) {
+                                                const newValue = field.value.includes(option)
+                                                    ? field.value.filter((v: string) => v !== option)
+                                                    : [...field.value, option];
+                                                field.onChange(newValue);
+                                            } else {
+                                                field.onChange([option]); // Initialize with the first option if not an array
+                                            }
+                                        }}
+                                        value={option}
+                                    />
+                                )}
+                            />
+                        }
+                        label={option}
+                    />
+                ))}
+            </FormGroup>
         </Box>
-      );
-      
-      
-      console.log(getValues(),"values" ,getValues()?.dateOfBirth,dob)
+    );
+
+
+    console.log(getValues(), "values", getValues()?.dateOfBirth, dob)
     if (loading) {
         return (
             <main>
@@ -219,7 +222,7 @@ const Suppliers = () => {
                                 required
                                 fullWidth
                                 id="email"
-                                label="Enter Email Address"
+                                label="Enter Email"
                                 {...register('email')}
                                 error={!!errors.email}
                                 helperText={errors.email ? errors.email.message : ''}
@@ -243,12 +246,12 @@ const Suppliers = () => {
                                 type="date"
                                 variant="outlined"
                                 margin="normal"
-                               value={dob}
+                                value={dob}
                                 required
                                 fullWidth
                                 id="dateOfBirth"
                                 label="Date of Birth"
-                                onChange={(e)=>{setDob(e.target.value);setValue('dateOfBirth',new Date(e.target.value).toISOString())}}
+                                onChange={(e) => { setDob(e.target.value); setValue('dateOfBirth', new Date(e.target.value).toISOString()) }}
                                 // {...register('dateOfBirth')}
                                 error={!!errors.dateOfBirth}
                                 helperText={errors.dateOfBirth ? errors.dateOfBirth.message : ''}
@@ -264,7 +267,7 @@ const Suppliers = () => {
                                 margin="normal"
                                 required
                                 value={select}
-                                onChange={(e)=>{setSelect(e.target.value);setValue('applicantType',e.target.value)}}
+                                onChange={(e) => { setSelect(e.target.value); setValue('applicantType', e.target.value) }}
                                 fullWidth
                                 id="applicantType"
                                 label="Applicant Type"
@@ -316,16 +319,22 @@ const Suppliers = () => {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
                             <TextField
+                                select
                                 variant="outlined"
                                 margin="normal"
                                 required
                                 fullWidth
                                 id="taxStatus"
                                 label="Tax Status"
-                                {...register('taxStatus')}
+                                value={tax}
+                                onChange={(e) => { setSelect(e.target.value); setValue('taxStatus',e.target.value)}}
+                                // {...register('taxStatus')}
                                 error={!!errors.taxStatus}
                                 helperText={errors.taxStatus ? errors.taxStatus.message : ''}
-                            />
+                            >
+                                <MenuItem value="">None</MenuItem>
+                                {["VAT", "Non-VAT"].map((v, i) => <MenuItem value={v} key={i}>{v}</MenuItem>)}
+                            </TextField>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} />
 

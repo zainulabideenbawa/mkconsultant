@@ -149,13 +149,6 @@ export default function PersistentDrawerLeft({
                         func:null
                     },
                     {
-                        name: "User Management",
-                        icon: <PersonAdd />,
-                        link: "/dashboard/usermanagement",
-                        selected: false,
-                        func:null
-                    },
-                    {
                         name: "Log Out",
                         icon: <Logout />,
                         link: "/dashboard",

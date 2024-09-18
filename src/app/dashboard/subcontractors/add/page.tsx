@@ -141,7 +141,7 @@ const Suppliers = () => {
                                 required
                                 fullWidth
                                 id="email"
-                                label="Enter Email Address"
+                                label="Enter Email"
                                 {...register('email')}
                                 error={!!errors.email}
                                 helperText={errors.email ? errors.email.message : ''}
@@ -237,13 +237,17 @@ const Suppliers = () => {
                                 variant="outlined"
                                 margin="normal"
                                 required
+                                select
                                 fullWidth
                                 id="taxStatus"
                                 label="Tax Status"
                                 {...register('taxStatus')}
                                 error={!!errors.taxStatus}
                                 helperText={errors.taxStatus ? errors.taxStatus.message : ''}
-                            />
+                                >
+                                <MenuItem value="">None</MenuItem>
+                                {["VAT", "Non-VAT"].map((v, i) => <MenuItem value={v} key={i}>{v}</MenuItem>)}
+                            </TextField>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}/>
 
