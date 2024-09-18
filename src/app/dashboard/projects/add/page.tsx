@@ -8,6 +8,7 @@ import Delete from '@mui/icons-material/Delete'
 
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
+import { ArrowLeftSharp } from '@mui/icons-material';
 
 
 
@@ -177,6 +178,9 @@ const ProjectForm = () => {
     const calculateGrandTotal = () => {
         return materials.reduce((acc, material) => acc + Number(Number(material.totalCost).toFixed(2)), 0);
     };
+    const goBack = ()=>{
+        setShowMaterial(false)
+    }
     console.log(Number(getValues().clientId), "Number(getValues().clientId)")
     const submitProject = async () => {
         setSubmiting(true)
@@ -233,7 +237,8 @@ const ProjectForm = () => {
             </main>)
     }
     return (
-        !showMaterial ? <main>
+        !showMaterial ? 
+        <main>
             <Typography variant='h4' sx={{ fontWeight: "bold", marginBottom: 4 }}>Add New Project</Typography>
             <Paper sx={{ padding: 4 }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -543,7 +548,12 @@ const ProjectForm = () => {
                 </form>
             </Paper>
         </main> : <main>
-            <Typography variant='h4' sx={{ fontWeight: "bold", marginBottom: 4 }}>Material / Cost</Typography>
+            <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between",marginBottom:20}}>
+            <Typography variant='h4' sx={{ fontWeight: "bold"}}>Material / Cost</Typography>
+            <Button onClick={goBack} variant='contained' color='primary' size='small'>
+               <ArrowLeftSharp/> Go Back
+            </Button>
+            </div>
             <Paper sx={{ padding: 4 }}>
                 <form onSubmit={handleSubmitMaterial(onSubmitMaterial)}>
                     <Grid container spacing={2}>
