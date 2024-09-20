@@ -4,10 +4,26 @@ import background from '@/assets/background.png'
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { signIn } from 'next-auth/react';
+import { signIn, SignInResponse, useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useMemo, useState } from 'react';
+import React, { Suspense, useMemo, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import speakeasy from 'speakeasy';
+
+interface CustomSignInResponse extends SignInResponse {
+    twoFactorRequired?: boolean; // Add other properties if needed
+    twoFactorSecret?: string
+}
+interface userObject {
+
+    name: string;
+    email: string;
+    id: string;
+    role: string;
+    twoFactorRequired: boolean;
+    twoFactorSecret: string | null;
+
+}
 const schema = z.object({
     email: z.string().email('Invalid email address'),
     password: z.string()
@@ -15,8 +31,13 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const LoginPage = () => {
+    const { data: session } = useSession()
     const searchParams = useSearchParams();
     const [loading, setLoading] = useState(false)
+    const [twoFactorRequired, setTwoFactorRequired] = useState(false);
+    const [twoFactorSecret, setTwoFactorSecret] = useState('');
+    const [twoFactorToken, setTwoFactorToken] = useState('');
+
     const {
         register,
         handleSubmit,
@@ -24,20 +45,45 @@ const LoginPage = () => {
     } = useForm<FormData>({
         resolver: zodResolver(schema)
     });
+
     const [error, setError] = useState(
         searchParams.get("error") ? "Invalid Credentials" : ""
     );
+
     const callbackUrl = "/dashboard";
-    const onSubmit: SubmitHandler<FormData> =async data => {
+
+    const onSubmit: SubmitHandler<FormData> = async data => {
         setLoading(true)
-        console.log(data);
-        // Handle login logic here
-        await signIn('credentials', {
+        const result = await signIn('credentials', {
             ...data,
-            callbackUrl
-        })
-        setLoading(false)
+            callbackUrl,
+            redirect: false
+        }) as CustomSignInResponse;
+
+        console.log(result, "result")
+        // setLoading(false);
+
+        if (result?.error) {
+            setError(result.error);
+        }
+        //     setTwoFactorRequired(true);
+        //     setTwoFactorSecret(result?.twoFactorSecret||""); // Adjust based on your setup
+        // } else {
+        //     window.location.href = callbackUrl; // Successful login
+        // }
     };
+
+    React.useEffect(() => {
+        if (session) {
+            let s = session.user as unknown as userObject
+            if (s.twoFactorRequired) {
+                setTwoFactorRequired(true);
+                setTwoFactorSecret(s?.twoFactorSecret || ""); // Adjust based on your setup 
+            } else {
+                window.location.href = callbackUrl;
+            }
+        }
+    }, [session])
     useMemo(() => {
         if (error !== "") {
             toast.error(error)
@@ -46,6 +92,28 @@ const LoginPage = () => {
             }, 1000);
         }
     }, [error]);
+
+    const verifyTwoFactorToken = async (token: string, secret: string) => {
+        // console.log(token,secret)
+        // const isValid = speakeasy.totp.verify({
+        //     secret, // User's secret
+        //     encoding: 'base32',
+        //     token,  // The TOTP code entered by the user
+        // });
+
+        // return { success: isValid };
+        const response = await fetch('/api/verify-2fa/', {
+            method: "POST",
+            body: JSON.stringify({
+                token,
+                secret: secret,
+            })
+        })
+        let body = await response.json()
+        // return body.status
+        return { success: body.status };
+    };
+
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <Box sx={{
@@ -56,7 +124,6 @@ const LoginPage = () => {
                 backgroundImage: `url(${background.src})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-
             }}>
                 <Container maxWidth="sm" sx={{ backgroundColor: 'white', padding: 4, borderRadius: 2, boxShadow: 3 }}>
                     <Box sx={{
@@ -69,7 +136,7 @@ const LoginPage = () => {
                         <h1 style={{ textAlign: "center" }}>Login</h1>
                     </Box>
                     <Box sx={{ paddingLeft: 5, paddingRight: 5 }}>
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                        {!twoFactorRequired ? <form onSubmit={handleSubmit(onSubmit)}>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
@@ -106,7 +173,42 @@ const LoginPage = () => {
                             >
                                 {loading ? <CircularProgress /> : "Log In"}
                             </Button>
-                        </form>
+                        </form> :
+
+                            (
+                                <Box sx={{ paddingLeft: 5, paddingRight: 5 }}>
+                                    <TextField
+                                        variant="outlined"
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="twoFactorToken"
+                                        label="2FA Token"
+                                        type="text"
+                                        value={twoFactorToken}
+                                        onChange={(e) => setTwoFactorToken(e.target.value)}
+                                        autoComplete="one-time-code"
+                                    />
+                                    <Button
+                                        type="button"
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        sx={{ mt: 3, mb: 2 }}
+                                        onClick={async () => {
+                                            const verifyResult = await verifyTwoFactorToken(twoFactorToken, twoFactorSecret);
+                                            if (verifyResult.success) {
+                                                window.location.href = callbackUrl;
+                                            } else {
+                                                setError("Invalid 2FA token");
+                                            }
+                                        }}
+                                    >
+                                        Verify 2FA
+                                    </Button>
+                                </Box>
+                            )}
+
                         <Box sx={{ textAlign: 'center' }}>
                             <Button href="#" variant="text">
                                 Forgot password?

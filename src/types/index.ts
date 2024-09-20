@@ -46,6 +46,20 @@ export interface User {
   lastName: string;
 }
 
+export interface UserFor2FA {
+  email: string;
+  id: string;
+  role: string;
+  password: string;
+  twoFactorSecret: string;
+  firstName: string | null;
+  lastName: string | null;
+  designation: string;
+  createdAt: Date;
+  updatedAt: Date;
+  twoFactorEnabled: boolean;
+}
+
 export interface Material {
   id: string;
   material: string;
@@ -112,8 +126,8 @@ export interface Invoice {
   remarks: string
   status: string
   transactionType: string,
-  client:Client,
-  project:QuotationData
+  client: Client,
+  project: QuotationData
 }
 
 export enum PROJECTSTATUS {

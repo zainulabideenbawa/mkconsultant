@@ -5,9 +5,9 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 
 export const authOptions: AuthOptions = {
   // useSecureCookies:true,
-  pages:{
-    signIn:"/auth/login",
-    signOut:"/auth/login",
+  pages: {
+    signIn: "/auth/login",
+    signOut: "/auth/login",
   },
   session: {
     strategy: 'jwt'
@@ -39,7 +39,7 @@ export const authOptions: AuthOptions = {
           return null
         }
         console.log(user)
-        if(!user.password){
+        if (!user.password) {
           return null
         }
 
@@ -51,39 +51,55 @@ export const authOptions: AuthOptions = {
         if (!isPasswordValid) {
           return null
         }
+        console.log(user.twoFactorEnabled, "user.twoFactorEnabled")
+        // After validating the user and password
+        if (user.twoFactorEnabled) {
+          console.log('Returning 2FA response', {
+            id: user.id,
+            email: user.email,
+            name: user.firstName + " " + user.lastName,
+            role: user.role,
+            twoFactorRequired: true,
+            twoFactorSecret: user.twoFactorSecret // Include the secret for verification
+          });
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.firstName + " " + user.lastName,
+            role: user.role,
+            twoFactorRequired: true,
+            twoFactorSecret: user.twoFactorSecret // Include the secret for verification
+          };
+        }
 
         return {
           id: user.id,
           email: user.email,
           name: user.firstName + " " + user.lastName,
-          role:user.role
-        }
+          role: user.role
+        };
       }
     })
   ],
   callbacks: {
-    session: ({ session, token }) => {
-      // console.log('Session Callback', { session, token })
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-          role:token.role
-        }
-      }
-    },
     jwt: ({ token, user }) => {
-      // console.log('JWT Callback', { token, user })
+      let u = user as unknown as any
       if (user) {
-        const u = user as unknown as any
-        return {
-          ...token,
-          id: u.id,
-          role:u.role
-        }
+        token.id = user.id;
+        token.role = u.role;
+        token.twoFactorRequired = u.twoFactorRequired || false;
+        token.twoFactorSecret = u.twoFactorSecret || null;
       }
-      return token
-    }
+      return token;
+    },
+    session: ({ session, token }) => {
+      let s = session as unknown as any
+      s.user.id = token.id;
+      s.user.role = token.role;
+      s.user.twoFactorRequired = token.twoFactorRequired;
+      s.user.twoFactorSecret = token.twoFactorSecret;
+      return session;
+    },
   }
 }
