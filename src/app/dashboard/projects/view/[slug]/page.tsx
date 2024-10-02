@@ -617,7 +617,7 @@ const Projects = () => {
             doc.addImage(MainLogo.src, 'PNG', margin, margin, 100, 20);
             doc.setFontSize(18);
             doc.setFillColor('blue');
-            doc.text('QUOTATION', pageWidth / 2, margin + 10, { align: 'center' });
+            doc.text('SUPPLIER REQUEST', pageWidth / 2, margin + 10, { align: 'center' });
 
             doc.setFontSize(12);
             doc.setFillColor('black');
