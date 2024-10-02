@@ -129,9 +129,9 @@ export default function DashboardTable({ rows }: {
                             <TableCell>{row.subContactor.name}</TableCell>
                             <TableCell>{new Date(row.startDate).toLocaleDateString()}</TableCell>
                             <TableCell>{new Date(row.endDate).toLocaleDateString()}</TableCell>
-                            <TableCell>${row.cost}</TableCell>
+                            <TableCell>£ {row.cost}</TableCell>
                             <TableCell>{row.vat}</TableCell>
-                            <TableCell>{row.cost + (row.vat/100* row.cost)}</TableCell>
+                            <TableCell>£ {row.cost + (row.vat/100* row.cost)}</TableCell>
                             {/* <TableCell>
                                 <IconButton>
                                     <Receipt />

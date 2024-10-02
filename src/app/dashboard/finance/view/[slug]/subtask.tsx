@@ -129,9 +129,9 @@ export default function DashboardTable({ rows,handelOpenDialogue,submiting }: {
                                 <TableCell>{row.taskId}</TableCell>
                                 <TableCell>{row.name}</TableCell>
                                 <TableCell>{row.subContactor.name}</TableCell>
-                                <TableCell>${row.cost}</TableCell>
+                                <TableCell>£ {row.cost}</TableCell>
                                 <TableCell>{row.vat}</TableCell>
-                                <TableCell>{row.cost + (row.vat / 100 * row.cost)}</TableCell>
+                                <TableCell>£ {row.cost + (row.vat / 100 * row.cost)}</TableCell>
                                 <TableCell>
                                     <Chip
                                         label={row.payment}

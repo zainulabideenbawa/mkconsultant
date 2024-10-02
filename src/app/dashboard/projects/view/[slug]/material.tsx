@@ -127,10 +127,10 @@ export default function DashboardTable({ rows }: {
                             <TableCell>{row.supplier.name}</TableCell>
                             <TableCell>{row.quantity}</TableCell>
                             <TableCell>{row.unit}</TableCell>
-                            <TableCell>{row.price}</TableCell>
-                            <TableCell>{row.price * row.quantity}</TableCell>
+                            <TableCell>£ {row.price}</TableCell>
+                            <TableCell>£ {row.price * row.quantity}</TableCell>
                             <TableCell>{row.vat}</TableCell>
-                            <TableCell>{row.totalCost}</TableCell>
+                            <TableCell>£ {row.totalCost}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

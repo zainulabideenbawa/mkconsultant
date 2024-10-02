@@ -361,7 +361,7 @@ const Projects = () => {
                             </Box>
                             <SubTaskTable rows={m.subTaks} handelOpenDialogue={handelOpenDialogue} submiting={submiting} />
                             <Box sx={{ display: "flex", justifyContent: 'flex-end', marginTop: 4, marginBottom: 2 }}>
-                                <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Total = ${Number(m.subTaks.reduce((total, subTask) => total + (subTask.cost + (subTask.vat / 100 * subTask.cost)), 0)).toFixed(2).toLocaleString()}</Typography>
+                                <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Total = £{Number(m.subTaks.reduce((total, subTask) => total + (subTask.cost + (subTask.vat / 100 * subTask.cost)), 0)).toFixed(2).toLocaleString()}</Typography>
                             </Box>
                             <Divider />
                         </>
@@ -381,7 +381,7 @@ const Projects = () => {
                             </Box>
                             <MaterialTable rows={m.materials} handelOpenDialogue={handelOpenDialogue} submiting={submiting} />
                             <Box sx={{ display: "flex", justifyContent: 'flex-end', marginTop: 4, marginBottom: 2 }}>
-                                <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Total = ${Number(m.materials.reduce((total, subTask) => total + (subTask.totalCost), 0)).toFixed(2).toLocaleString()}</Typography>
+                                <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Total = £{Number(m.materials.reduce((total, subTask) => total + (subTask.totalCost), 0)).toFixed(2).toLocaleString()}</Typography>
                             </Box>
                             <Divider />
                         </>
@@ -391,35 +391,35 @@ const Projects = () => {
                 <Grid container spacing={3} sx={{ marginTop: 10, marginLeft: 4 }}>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Sub-Tasks</Typography>
-                        <Typography variant='body1' >${total.subTaskAmount.toLocaleString()}</Typography>
+                        <Typography variant='body1' >£{total.subTaskAmount.toLocaleString()}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >+</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Material / Cost</Typography>
-                        <Typography variant='body1' >${total.materialAmount.toLocaleString()}</Typography>
+                        <Typography variant='body1' >£{total.materialAmount.toLocaleString()}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >+</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>% Markup</Typography>
-                        <Typography variant='body1' >${total.markupAmount.toLocaleString()}</Typography>
+                        <Typography variant='body1' >£{total.markupAmount.toLocaleString()}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >+</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>VAT</Typography>
-                        <Typography variant='body1' >${total.vat.toLocaleString()}</Typography>
+                        <Typography variant='body1' >£{total.vat.toLocaleString()}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >=</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Quotation</Typography>
-                        <Typography variant='body1' >${total.totalAmount.toLocaleString()}</Typography>
+                        <Typography variant='body1' >£{total.totalAmount.toLocaleString()}</Typography>
                     </Grid>
                 </Grid>
                 <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 4, marginBottom: 2 }}>

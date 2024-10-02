@@ -121,7 +121,7 @@ const [email,setEmail] = useState("")
       },
       {
         title: "Earnings",
-        number: `£ ${Number(body.earning).toFixed(0)}`,
+        number: `£ {Number(body.earning).toFixed(0)}`,
       },
       {
         title: "Revenue",
@@ -380,11 +380,11 @@ const [email,setEmail] = useState("")
             <Typography variant="h4">Recent Clients</Typography>
             {
               recentClient.map((client, index) => (
-                <>
+                <div>
                   <Typography variant="h6">{client.name}</Typography>
                   <Typography variant="body1">{client.projectId}</Typography>
                   <Divider />
-                </>
+                </div>
               ))
             }
           </Container>
