@@ -380,7 +380,7 @@ const [email,setEmail] = useState("")
             <Typography variant="h4">Recent Clients</Typography>
             {
               recentClient.map((client, index) => (
-                <div>
+                <div key={index}>
                   <Typography variant="h6">{client.name}</Typography>
                   <Typography variant="body1">{client.projectId}</Typography>
                   <Divider />
