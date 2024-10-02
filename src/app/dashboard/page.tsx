@@ -121,7 +121,7 @@ const [email,setEmail] = useState("")
       },
       {
         title: "Earnings",
-        number: `£ {Number(body.earning).toFixed(0)}`,
+        number: `£ ${Number(body.earning).toFixed(0)}`,
       },
       {
         title: "Revenue",
