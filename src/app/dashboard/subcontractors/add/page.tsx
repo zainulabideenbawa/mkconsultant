@@ -14,6 +14,8 @@ const schema = z.object({
     dateOfBirth: z.string().min(3),
     applicantType: z.string().min(1),
     approxTeamSize: z.string(),
+    priceRate: z.string(),
+    qualification: z.string(),
     dailyRate: z.string(),
     areasOfWork: z.string(),
     taxStatus: z.string().min(1),
@@ -224,6 +226,19 @@ const Suppliers = () => {
                             <TextField
                                 variant="outlined"
                                 margin="normal"
+                                required
+                                fullWidth
+                                id="priceRate"
+                                label="Price Rate"
+                                {...register('priceRate')}
+                                error={!!errors.priceRate}
+                                helperText={errors.priceRate ? errors.priceRate.message : ''}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={4}>
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
                                 fullWidth
                                 id="areasOfWork"
                                 label="Areas Of Work"
@@ -249,25 +264,37 @@ const Suppliers = () => {
                                 {["VAT", "Non-VAT"].map((v, i) => <MenuItem value={v} key={i}>{v}</MenuItem>)}
                             </TextField>
                         </Grid>
-                        <Grid item xs={12} sm={6} md={4}/>
+                        <Grid item xs={12} sm={6} md={4}>
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                id='qualification'
+                                label="Qualification"
+                                {...register('qualification')}
+                                error={!!errors.qualification}
+                                helperText={errors.qualification ? errors.qualification.message : ''}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={8}/>
 
-                        <Grid item xs={12} sm={6} md={2.4}>
+                        <Grid item xs={12} sm={6} md={3}>
                             {renderCheckboxGroup("Tool & Equipment", toolsOptions, register, 'tools')}
                         </Grid>
 
-                        <Grid item  xs={12} sm={6} md={2.4}>
+                        <Grid item  xs={12} sm={6} md={3}>
                             {renderCheckboxGroup("Transport", transportOptions, register, 'transport')}
                         </Grid>
 
-                        <Grid item  xs={12} sm={6} md={2.4}>
+                        {/* <Grid item  xs={12} sm={6} md={3}>
                             {renderCheckboxGroup("Licence", licenceOptions, register, 'licence')}
-                        </Grid>
+                        </Grid> */}
 
-                        <Grid item  xs={12} sm={6} md={2.4}>
+                        <Grid item  xs={12} sm={6} md={3}>
                             {renderCheckboxGroup("Experience Type", experienceTypeOptions, register, 'experienceType')}
                         </Grid>
 
-                        <Grid item  xs={12} sm={6} md={2.4}>
+                        <Grid item  xs={12} sm={6} md={3}>
                             {renderCheckboxGroup("Experience Partitions", experiencePartitionsOptions, register, 'experiencePartitions')}
                         </Grid>
 

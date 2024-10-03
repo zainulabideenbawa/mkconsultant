@@ -704,9 +704,9 @@ const ProjectForm = () => {
                                     <TableCell>{Suppliers?.find(f => f.id === material.supplier)?.name || ""}</TableCell>
                                     <TableCell>{material.quantity}</TableCell>
                                     <TableCell>{material.unit}</TableCell>
-                                    <TableCell>${Number(material.price).toFixed(2)}</TableCell>
+                                    <TableCell>£ {Number(material.price).toFixed(2)}</TableCell>
                                     <TableCell>{material.vat}%</TableCell>
-                                    <TableCell>${Number(material.totalCost).toFixed(2)}</TableCell>
+                                    <TableCell>£ {Number(material.totalCost).toFixed(2)}</TableCell>
                                 </TableRow>
                             ))}
                             <TableRow>
@@ -714,7 +714,7 @@ const ProjectForm = () => {
                                     <strong>Total =</strong>
                                 </TableCell>
                                 <TableCell>
-                                    <strong>${calculateGrandTotal().toFixed(2)}</strong>
+                                    <strong>£ {calculateGrandTotal().toFixed(2)}</strong>
                                 </TableCell>
                             </TableRow>
                         </TableBody>

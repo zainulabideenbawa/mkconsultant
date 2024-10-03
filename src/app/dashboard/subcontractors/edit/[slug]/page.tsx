@@ -15,7 +15,9 @@ const schema = z.object({
     dateOfBirth: z.string().min(3),
     applicantType: z.string().min(1),
     approxTeamSize: z.string(),
+    qualification: z.string(),
     dailyRate: z.string(),
+    priceRate: z.string(),
     areasOfWork: z.string(),
     taxStatus: z.string().min(1),
     tools: z.array(z.string()).optional(),
@@ -64,6 +66,8 @@ const Suppliers = () => {
                 setValue('approxTeamSize', _data.approxTeamSize);
                 setValue('areasOfWork', _data.areasOfWork);
                 setValue('dailyRate', _data.dailyRate);
+                setValue('priceRate', _data.priceRate);
+                setValue('qualification', _data.qualification);
                 setValue('dateOfBirth', _data.dateOfBirth);
                 setDob(`${_D.getFullYear()}-${String(_D.getMonth() + 1).padStart(2, "0")}-${String(_D.getDate()).padStart(2, "0")}`) // Assuming the API returns ISO-8601 date
                 setValue('email', _data.email);
@@ -309,6 +313,19 @@ const Suppliers = () => {
                             <TextField
                                 variant="outlined"
                                 margin="normal"
+                                required
+                                fullWidth
+                                id="priceRate"
+                                label="Price Rate"
+                                {...register('priceRate')}
+                                error={!!errors.priceRate}
+                                helperText={errors.priceRate ? errors.priceRate.message : ''}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={4}>
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
                                 fullWidth
                                 id="areasOfWork"
                                 label="Areas Of Work"
@@ -336,25 +353,37 @@ const Suppliers = () => {
                                 {["VAT", "Non-VAT"].map((v, i) => <MenuItem value={v} key={i}>{v}</MenuItem>)}
                             </TextField>
                         </Grid>
-                        <Grid item xs={12} sm={6} md={4} />
+                        <Grid item xs={12} sm={6} md={4}>
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                id='qualification'
+                                label="Qualification"
+                                {...register('qualification')}
+                                error={!!errors.qualification}
+                                helperText={errors.qualification ? errors.qualification.message : ''}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={8}/>
 
-                        <Grid item xs={12} sm={6} md={2.4}>
+                        <Grid item xs={12} sm={6} md={3}>
                             {renderCheckboxGroup("Tool & Equipment", toolsOptions, 'tools')}
                         </Grid>
 
-                        <Grid item xs={12} sm={6} md={2.4}>
+                        <Grid item xs={12} sm={6} md={3}>
                             {renderCheckboxGroup("Transport", transportOptions, 'transport')}
                         </Grid>
 
-                        <Grid item xs={12} sm={6} md={2.4}>
+                        {/* <Grid item xs={12} sm={6} md={2.4}>
                             {renderCheckboxGroup("Licence", licenceOptions, 'licence')}
-                        </Grid>
+                        </Grid> */}
 
-                        <Grid item xs={12} sm={6} md={2.4}>
+                        <Grid item xs={12} sm={6} md={3}>
                             {renderCheckboxGroup("Experience Type", experienceTypeOptions, 'experienceType')}
                         </Grid>
 
-                        <Grid item xs={12} sm={6} md={2.4}>
+                        <Grid item xs={12} sm={6} md={3}>
                             {renderCheckboxGroup("Experience Partitions", experiencePartitionsOptions, 'experiencePartitions')}
                         </Grid>
 

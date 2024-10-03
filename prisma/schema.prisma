@@ -51,7 +51,9 @@ model SubContractor {
   dateOfBirth          DateTime
   applicantType        String
   approxTeamSize       String
+  priceRate            String  @default("0")
   dailyRate            String
+  qualification        String  @default("")
   areasOfWork          String
   taxStatus            String
   tools                String[]

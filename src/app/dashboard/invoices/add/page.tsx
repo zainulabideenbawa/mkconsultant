@@ -43,7 +43,7 @@ const InvoiceForm = () => {
         Logo04.src,
 
     ]
-    const [submiting,setSubmiting] = useState(false)
+    const [submiting, setSubmiting] = useState(false)
     const [loading, setLoading] = useState(true)
     const [client, setClients] = useState<Client[]>([])
     const [remainting, setRemaining] = useState(0)
@@ -76,7 +76,7 @@ const InvoiceForm = () => {
                     text: "invoices Created Successfully",
                     timer: 3000
                 });
-                generatePDF(data)
+                await generatePDF(data)
                 router.replace('/dashboard/invoices');
             } else {
                 Swal.fire({
@@ -106,7 +106,7 @@ const InvoiceForm = () => {
             if (f) {
                 setRemaining(f.remainingAmount - Number(amount))
             }
-        }else{
+        } else {
             setRemaining(remaintingAmount)
         }
     }, [amount])
@@ -156,109 +156,53 @@ const InvoiceForm = () => {
     }
 
     const generatePDF = async (data: FormData) => {
-        const doc = new jsPDF('p', 'mm', 'a4');
-        const pageHeight = doc.internal.pageSize.height;
-        const pageWidth = doc.internal.pageSize.width;
-        const margin = 10;
-        const headerHeight = 50;
-        const footerHeight = 50;
-        const contentHeight = pageHeight - headerHeight - footerHeight - 2 * margin;
         const _c = client.find(f => f.id === wathClient)
         const _p = projects.find(f => f.id === watchProject)
         if (!_c && _p) return null
-        const header = () => {
-            if (!_c && _p) return null
-            doc.addImage(MainLogo.src, 'PNG', margin, margin, 100, 20);
-            doc.setFontSize(18);
-            doc.setFillColor('blue');
-            doc.text('INVOICE', pageWidth / 2, margin + 10, { align: 'center' });
-
-            doc.setFontSize(12);
-            doc.setFillColor('black');
-
-            doc.text(_c?.name || "", margin, margin + 40);
-            doc.text(_c?.phone || "", margin, margin + 48);
-            doc.text(_c?.email || "", margin, margin + 56);
-            doc.text(_c?.location || "", margin, margin + 64);
-
-            doc.text(`Invoice no: ${String(data.invoiceId).padStart(6, "0")}`, pageWidth - margin - 60, margin + 30);
-            doc.text(`Invoice Date:${new Date().toLocaleDateString()}`, pageWidth - margin - 60, margin + 35);
-            doc.text(`Invoice Due Date:${new Date(data.dueDate).toLocaleDateString()}`, pageWidth - margin - 60, margin + 40);
-        };
-
-        const footer = (page: any) => {
-            const footerY = pageHeight - footerHeight - margin;
-            doc.setFontSize(10);
-            doc.text(`www.mkcontracts.com | +44 (0) 208 518 2100 | 50 Bunting Bridge, Newbury Park, Essex, IG2 7LR`, pageWidth / 2, footerY + 35, { align: 'center' });
-
-            doc.setFontSize(8);
-            doc.text('Thank you for your business with us!', pageWidth / 2, footerY + 45, { align: 'center' });
-
-            doc.setFontSize(10);
-            doc.text(`Page ${page}`, pageWidth / 2, footerY + 55, { align: 'center' });
-
-            // Add footer logos with margin and different sizes on the right side
-            const logosY = footerY + 10;
-            const logoMargin = 5;
-            const logoWidth = 20;  // Width of square logos
-            const rectLogoWidth = 30; // Width of rectangular logos
-            const logoHeight = 20; // Height of logos
-
-            // Calculate the starting x position based on the number of logos and their sizes
-            const logosX = (pageWidth / 2) - (((footerLogos.length - 2) * (logoWidth + logoMargin)) / 2) - ((2 * (rectLogoWidth + logoMargin)) / 2);
-
-            footerLogos.forEach((logo: any, index: any) => {
-                const xPosition = index === 1 || index === 3
-                    ? logosX + index * (rectLogoWidth + logoMargin)
-                    : logosX + index * (logoWidth + logoMargin + 10);
-
-                const width = index === 1 || index === 3 ? rectLogoWidth : logoWidth;
-                doc.addImage(logo, 'PNG', xPosition, logosY, width, logoHeight);
+        try {
+            const res = await fetch('/api/generateInovice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/pdf'
+                },
+                body: JSON.stringify({
+                    invoiceNumber: String(data.invoiceId).padStart(6, "0"),
+                    invoiceDate: new Date().toLocaleDateString(),
+                    invoiceDueDate: new Date(data.dueDate).toLocaleDateString(),
+                    name: _c?.name || "",
+                    phone: _c?.phone || "",
+                    email: _c?.email || "",
+                    location: _c?.location || "",
+                    total: `${total.toLocaleString()}`,
+                    data: [{
+                        no: 1,
+                        description: `Project ID - ${String(_p?.projectId).padStart(6, '0')}, ${_p?.name}`,
+                        price: `£ ${Number(data.amount).toLocaleString()}`
+                    }]
+                })
             });
-        };
 
-        const addTableContent = () => {
-            const startY = margin + headerHeight + 20;
-            let currentY = startY;
-            let page = 1;
-            let rowIndex = 0;
+            if (res.ok) {
+                const blob = await res.blob();  // Convert the response to a Blob (binary data)
+                const url = window.URL.createObjectURL(blob);  // Create a temporary URL for the Blob
 
-            const tableHeader = () => {
-                doc.setFontSize(12);
-                doc.text("", margin, margin + 64)
-                doc.text('NO', margin, currentY);
-                doc.text('DESCRIPTION', margin + 20, currentY);
-                doc.text('PRICE', pageWidth - margin - 40, currentY);
-                currentY += 10;
-            };
+                // Create a link element
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `Inovice ${data.invoiceId}.pdf`);  // Set the file name for the download
+                document.body.appendChild(link);  // Append the link to the document
+                link.click();  // Programmatically click the link to trigger the download
+                if (link?.parentNode)
+                    // Clean up
+                    link?.parentNode.removeChild(link);  // Remove the link element from the document
+                window.URL.revokeObjectURL(url);  // Release the Blob URL to free up memory
+            } else {
+                console.error('Failed to download PDF:', res.statusText);
+            }
+        } catch (error) {
+            console.error('Error while fetching the PDF:', error);
+        }
 
-            const tableRow = (row: any) => {
-                doc.text(`${row.no}`, margin, currentY);
-                doc.text(`${row.description}`, margin + 20, currentY);
-                doc.text(`${row.price}`, pageWidth - margin - 40, currentY);
-                currentY += 10;
-            };
-
-            tableHeader();
-            tableRow({
-                no: 1,
-                description: `Project ID - ${String(_p?.projectId).padStart(6, '0')}, ${_p?.name}`,
-                price: `£ ${Number(data.amount).toLocaleString()}`
-            })
-            footer(page);
-        };
-
-        const addProjectDetailsAndPaymentMethod = () => {
-            const startY = margin + headerHeight + 150;
-            doc.setFontSize(12);
-            doc.text(`Total Amount : £ ${total.toLocaleString()}`, pageWidth - margin - 60, startY + 20);
-        };
-
-        let page = 1;
-        header();
-        addTableContent();
-        addProjectDetailsAndPaymentMethod();
-        doc.save(`Inovice ${data.invoiceId}.pdf`);
     };
     if (loading) {
         return (
@@ -361,10 +305,10 @@ const InvoiceForm = () => {
                                 margin="normal"
                                 required
                                 fullWidth
-                                
+
                                 id="amount"
                                 label="Enter Amount"
-                                {...register('amount',{
+                                {...register('amount', {
                                     required: 'Amount is required',
                                     min: {
                                         value: 1,
@@ -379,7 +323,7 @@ const InvoiceForm = () => {
                                 InputProps={{
                                     inputProps: {
                                         min: 1, // Disable past dates
-                                        max:remaintingAmount
+                                        max: remaintingAmount
                                     }
                                 }}
                                 helperText={errors.amount ? errors.amount.message : ''}
@@ -387,9 +331,9 @@ const InvoiceForm = () => {
                                     const value = e.target.value;
                                     // Allow only numbers and a single decimal point
                                     if (/^\d*\.?\d*$/.test(value)) {
-                                      setValue('amount',value)// Keep value as a string
+                                        setValue('amount', value)// Keep value as a string
                                     }
-                                  }}
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
@@ -426,10 +370,10 @@ const InvoiceForm = () => {
                                 color="primary"
                                 disabled={submiting}
                             >
-                                 {
-                            submiting ? <CircularProgress /> : "Submit"
-                        }
-                                
+                                {
+                                    submiting ? <CircularProgress /> : "Submit"
+                                }
+
                             </Button>
                         </Grid>
                     </Grid>

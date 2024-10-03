@@ -42,6 +42,7 @@ export default function Home() {
   const [showPopup, setPopUp] = useState(false)
   const router = useRouter();
   const [code, setCode] = useState<string>(''); // Input field for user to enter TOTP code
+  const [submitting,setSubmitting] = useState(false)
   const [verificationResult, setVerificationResult] = useState<string | null>(null); // Show verification result
 const [email,setEmail] = useState("")
   const [cardData, setCardData] = useState([
@@ -186,110 +187,57 @@ const [email,setEmail] = useState("")
     }
   }
   const generatePDF = async (data: Invoice) => {
-    const doc = new jsPDF('p', 'mm', 'a4');
-    const pageHeight = doc.internal.pageSize.height;
-    const pageWidth = doc.internal.pageSize.width;
-    const margin = 10;
-    const headerHeight = 50;
-    const footerHeight = 50;
-    const contentHeight = pageHeight - headerHeight - footerHeight - 2 * margin;
+    setSubmitting(true)
     const _c = data.client
-    const _p = data.project
+    const _p = data.Project
     if (!_c && _p) return null
-    const header = () => {
-      if (!_c && _p) return null
-      doc.addImage(MainLogo.src, 'PNG', margin, margin, 100, 20);
-      doc.setFontSize(18);
-      doc.setFillColor('blue');
-      doc.text('INVOICE', pageWidth / 2, margin + 10, { align: 'center' });
+    console.log(_p,_c,data)
+    try {
+        const res = await fetch('/api/generateInovice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/pdf'
+            },
+            body: JSON.stringify({
+                invoiceNumber: String(data.InvoiceId).padStart(6, "0"),
+                invoiceDate: new Date().toLocaleDateString(),
+                invoiceDueDate: new Date(data.dueDate).toLocaleDateString(),
+                name: _c?.name || "",
+                phone: _c?.phone || "",
+                email: _c?.email || "",
+                location: _c?.location || "",
+                total: `${data.Amount.toLocaleString()}`,
+                data: [{
+                    no: 1,
+                    description: `Project ID - ${String(_p?.projectId).padStart(6, '0')}, ${_p?.name}`,
+                    price: `£ ${Number(data.Amount).toLocaleString()}`
+                }]
+            })
+        });
 
-      doc.setFontSize(12);
-      doc.setFillColor('black');
+        if (res.ok) {
+            const blob = await res.blob();  // Convert the response to a Blob (binary data)
+            const url = window.URL.createObjectURL(blob);  // Create a temporary URL for the Blob
 
-      doc.text(_c?.name || "", margin, margin + 40);
-      doc.text(_c?.phone || "", margin, margin + 48);
-      doc.text(_c?.email || "", margin, margin + 56);
-      doc.text(_c?.location || "", margin, margin + 64);
+            // Create a link element
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `Inovice ${data.InvoiceId}.pdf`);  // Set the file name for the download
+            document.body.appendChild(link);  // Append the link to the document
+            link.click();  // Programmatically click the link to trigger the download
+            if (link?.parentNode)
+                // Clean up
+                link?.parentNode.removeChild(link);  // Remove the link element from the document
+            window.URL.revokeObjectURL(url);  // Release the Blob URL to free up memory
+        } else {
+            console.error('Failed to download PDF:', res.statusText);
+        }
+    } catch (error) {
+        console.error('Error while fetching the PDF:', error);
+    }
+    setSubmitting(false)
 
-      doc.text(`Invoice no: ${String(data.InvoiceId).padStart(6, "0")}`, pageWidth - margin - 60, margin + 30);
-      doc.text(`Invoice Date:${new Date().toLocaleDateString()}`, pageWidth - margin - 60, margin + 35);
-      doc.text(`Invoice Due Date:${new Date(data.dueDate).toLocaleDateString()}`, pageWidth - margin - 60, margin + 40);
-    };
-
-    const footer = (page: any) => {
-      const footerY = pageHeight - footerHeight - margin;
-      doc.setFontSize(10);
-      doc.text(`www.mkcontracts.com | +44 (0) 208 518 2100 | 50 Bunting Bridge, Newbury Park, Essex, IG2 7LR`, pageWidth / 2, footerY + 35, { align: 'center' });
-
-      doc.setFontSize(8);
-      doc.text('Thank you for your business with us!', pageWidth / 2, footerY + 45, { align: 'center' });
-
-      doc.setFontSize(10);
-      doc.text(`Page ${page}`, pageWidth / 2, footerY + 55, { align: 'center' });
-
-      // Add footer logos with margin and different sizes on the right side
-      const logosY = footerY + 10;
-      const logoMargin = 5;
-      const logoWidth = 20;  // Width of square logos
-      const rectLogoWidth = 30; // Width of rectangular logos
-      const logoHeight = 20; // Height of logos
-
-      // Calculate the starting x position based on the number of logos and their sizes
-      const logosX = (pageWidth / 2) - (((footerLogos.length - 2) * (logoWidth + logoMargin)) / 2) - ((2 * (rectLogoWidth + logoMargin)) / 2);
-
-      footerLogos.forEach((logo: any, index: any) => {
-        const xPosition = index === 1 || index === 3
-          ? logosX + index * (rectLogoWidth + logoMargin)
-          : logosX + index * (logoWidth + logoMargin + 10);
-
-        const width = index === 1 || index === 3 ? rectLogoWidth : logoWidth;
-        doc.addImage(logo, 'PNG', xPosition, logosY, width, logoHeight);
-      });
-    };
-
-    const addTableContent = () => {
-      const startY = margin + headerHeight + 20;
-      let currentY = startY;
-      let page = 1;
-      let rowIndex = 0;
-
-      const tableHeader = () => {
-        doc.setFontSize(12);
-        doc.text("", margin, margin + 64)
-        doc.text('NO', margin, currentY);
-        doc.text('DESCRIPTION', margin + 20, currentY);
-        doc.text('PRICE', pageWidth - margin - 40, currentY);
-        currentY += 10;
-      };
-
-      const tableRow = (row: any) => {
-        doc.text(`${row.no}`, margin, currentY);
-        doc.text(`${row.description}`, margin + 20, currentY);
-        doc.text(`${row.price}`, pageWidth - margin - 40, currentY);
-        currentY += 10;
-      };
-
-      tableHeader();
-      tableRow({
-        no: 1,
-        description: `Project ID - ${String(_p?.projectId).padStart(6, '0')}, ${_p?.name}`,
-        price: `£ ${Number(data.Amount).toLocaleString()}`
-      })
-      footer(page);
-    };
-
-    const addProjectDetailsAndPaymentMethod = () => {
-      const startY = margin + headerHeight + 150;
-      doc.setFontSize(12);
-      doc.text(`Total Amount : £ ${data.Amount.toLocaleString()}`, pageWidth - margin - 60, startY + 20);
-    };
-
-    let page = 1;
-    header();
-    addTableContent();
-    addProjectDetailsAndPaymentMethod();
-    doc.save(`Inovice ${data.InvoiceId}.pdf`);
-  };
+};
   const handleSubmit = async () => {
     // Send the code and secret to the backend for verification
     try {
@@ -398,7 +346,7 @@ const [email,setEmail] = useState("")
                       <Typography variant="h6">Invoice # {invoice.InvoiceId}</Typography>
                       <Typography variant="body1">Client : {invoice.client.name}</Typography>
                     </Box>
-                    <Button variant='outlined' onClick={() => generatePDF(invoice)}>View</Button>
+                    <Button disabled={submitting} variant='outlined' onClick={() => generatePDF(invoice)}>{submitting?<CircularProgress/>:"View"}</Button>
                   </Box>
                   <Divider />
                 </Box>

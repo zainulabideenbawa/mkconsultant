@@ -16,7 +16,8 @@ export const GET = async (request: NextRequest) => {
         })
         const invoice = await prisma.invoice.findMany({
             include: {
-                client: true
+                client: true,
+                Project:true
             },
             take: 10,
             orderBy: {

@@ -127,7 +127,7 @@ export interface Invoice {
   status: string
   transactionType: string,
   client: Client,
-  project: QuotationData
+  Project: QuotationData
 }
 
 export enum PROJECTSTATUS {

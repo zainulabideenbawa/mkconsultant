@@ -10,6 +10,8 @@ const schema = z.object({
     applicantType: z.string().min(1),
     approxTeamSize: z.string(),
     dailyRate: z.string(),
+    priceRate: z.string(),
+    qualification: z.string(),
     areasOfWork: z.string(),
     taxStatus: z.string().min(1),
     tools: z.array(z.string()).optional(),
