@@ -7,6 +7,9 @@ import puppeteerCore from "puppeteer-core";
 
 import { z } from 'zod';
 
+export const maxDuration = 60; // 5 seconds
+export const dynamic = 'force-dynamic';
+
 const itemSchema = z.array(z.object({
 
     no: z.number(),
@@ -31,7 +34,14 @@ async function getBrowser() {
       const executablePath = await chromium.executablePath();
   
       const browser = await puppeteerCore.launch({
-        args: chromium.args,
+        args:  [
+            ...chromium.args,
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--single-process',
+          ],
         defaultViewport: chromium.defaultViewport,
         executablePath,
         headless: chromium.headless,
