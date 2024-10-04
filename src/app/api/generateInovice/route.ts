@@ -1,6 +1,8 @@
-import puppeteer from 'puppeteer';
+// import puppeteer from 'puppeteer';
 import prisma from '@/prisma';
 import { NextRequest, NextResponse } from 'next/server'
+import puppeteer from 'puppeteer-core';
+import chromium from 'chrome-aws-lambda'
 
 import { z } from 'zod';
 
@@ -27,7 +29,12 @@ const schema = z.object({
 export async function POST(request: NextRequest,) {
     const _d = await request.json()
     const body = await schema.parse(_d)
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: true,
+    });
     const page = await browser.newPage();
 
     // Dynamic HTML content to include your invoice details, records, and layout
