@@ -1,8 +1,9 @@
 // import puppeteer from 'puppeteer';
 import prisma from '@/prisma';
 import { NextRequest, NextResponse } from 'next/server'
-import puppeteer from 'puppeteer-core';
-import chromium from 'chrome-aws-lambda'
+import puppeteer from 'puppeteer';
+import chromium from '@sparticuz/chromium'
+import puppeteerCore from "puppeteer-core";
 
 import { z } from 'zod';
 
@@ -25,18 +26,30 @@ const schema = z.object({
     data: itemSchema
 })
 
+async function getBrowser() {
+    if (process.env.VERCEL_ENV === "production") {
+      const executablePath = await chromium.executablePath();
+  
+      const browser = await puppeteerCore.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath,
+        headless: chromium.headless,
+      });
+      return browser;
+    } else {
+      const browser = await puppeteer.launch();
+      return browser;
+    }
+  }
+  
+
 
 export async function POST(request: NextRequest,) {
     const _d = await request.json()
     const body = await schema.parse(_d)
-    const browser = await puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
-        headless: true,
-    });
+    const browser = await getBrowser();
     const page = await browser.newPage();
-
     // Dynamic HTML content to include your invoice details, records, and layout
     const content = `
  <!DOCTYPE html>
