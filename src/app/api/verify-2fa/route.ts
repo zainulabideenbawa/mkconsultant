@@ -2,8 +2,6 @@ import prisma from '@/prisma';
 import { NextRequest, NextResponse } from 'next/server'
 import speakeasy from 'speakeasy';
 
-
-
 export const GET = async (request: NextRequest, { params }: { params: { slug: string } }) => {
     let getData = await prisma.user.findFirst({
         where: {

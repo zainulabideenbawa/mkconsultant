@@ -189,7 +189,7 @@ const InvoiceForm = () => {
                 // Create a link element
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `Inovice ${data.invoiceId}.pdf`);  // Set the file name for the download
+                link.setAttribute('download', `Invoice ${data.invoiceId}.pdf`);  // Set the file name for the download
                 document.body.appendChild(link);  // Append the link to the document
                 link.click();  // Programmatically click the link to trigger the download
                 if (link?.parentNode)

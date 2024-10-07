@@ -32,12 +32,16 @@ type FormData = z.infer<typeof schema>;
 
 const LoginPage = () => {
     const { data: session } = useSession()
+    const [verify,setVerify] = useState(false)
     const searchParams = useSearchParams();
     const [loading, setLoading] = useState(false)
     const [twoFactorRequired, setTwoFactorRequired] = useState(false);
     const [twoFactorSecret, setTwoFactorSecret] = useState('');
     const [twoFactorToken, setTwoFactorToken] = useState('');
-
+    const [user, setUser] = useState({
+        email: "",
+        password: ""
+    })
     const {
         register,
         handleSubmit,
@@ -54,23 +58,39 @@ const LoginPage = () => {
 
     const onSubmit: SubmitHandler<FormData> = async data => {
         setLoading(true)
-        const result = await signIn('credentials', {
-            ...data,
-            callbackUrl,
-            redirect: false
-        }) as CustomSignInResponse;
 
-        console.log(result, "result")
-        // setLoading(false);
+        const res = await fetch('/api/verifySignIn', {
 
-        if (result?.error) {
-            setError(result.error);
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/pdf'
+            },
+            body: JSON.stringify(data)
+        })
+        if (res.ok) {
+            let body = await res.json()
+            console.log(body, "body")
+            if (body.twoFactorRequired) {
+                setTwoFactorRequired(true);
+                setTwoFactorSecret(body.twoFactorSecret || ""); // Adjust based on your setup 
+                setUser(data)
+            } else {
+
+                const result = await signIn('credentials', {
+                    ...data,
+                    callbackUrl,
+                    redirect: true
+                })
+                if (result?.error) {
+                    setError(result.error);
+                }
+            }
+
+        } else {
+            setError("Email or Password Not Matched");
         }
-        //     setTwoFactorRequired(true);
-        //     setTwoFactorSecret(result?.twoFactorSecret||""); // Adjust based on your setup
-        // } else {
-        //     window.location.href = callbackUrl; // Successful login
-        // }
+
+        setLoading(false)
     };
 
     React.useEffect(() => {
@@ -194,17 +214,28 @@ const LoginPage = () => {
                                         fullWidth
                                         variant="contained"
                                         color="primary"
+                                        disabled={verify}
                                         sx={{ mt: 3, mb: 2 }}
                                         onClick={async () => {
+                                            setVerify(true)
                                             const verifyResult = await verifyTwoFactorToken(twoFactorToken, twoFactorSecret);
                                             if (verifyResult.success) {
-                                                window.location.href = callbackUrl;
+                                                const result = await signIn('credentials', {
+                                                    ...user,
+                                                    callbackUrl,
+                                                    redirect: true
+                                                })
+                                                if (result?.error) {
+                                                    setError(result.error);
+                                                }
                                             } else {
                                                 setError("Invalid 2FA token");
                                             }
+                                            setVerify(false)
                                         }}
                                     >
-                                        Verify 2FA
+                                        {verify ? <CircularProgress /> : "Verify 2FA"}
+                                        
                                     </Button>
                                 </Box>
                             )}
