@@ -55,7 +55,7 @@ const Suppliers = () => {
                 location: f.Project.location,
                 phone: f.client.phone,
                 project: String(f.Project.projectId).padStart(0,"6"),
-                amount: String(f.Amount),
+                amount: Number(f.Amount).toFixed(2).toLocaleString(),
             }
         )))
         setOrignal(body.clients.map((f: any) => (
@@ -66,7 +66,7 @@ const Suppliers = () => {
                 location: f.Project.location,
                 phone: f.client.phone,
                 project: String(f.Project.projectId).padStart(0,"6"),
-                amount: String(f.Amount),
+                amount: Number(f.Amount).toFixed(2).toLocaleString(),
             }
         )))
         setLoading(false)

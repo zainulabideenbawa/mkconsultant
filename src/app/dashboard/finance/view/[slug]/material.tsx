@@ -125,9 +125,9 @@ export default function DashboardTable({ rows,handelOpenDialogue,submiting }: {
                             <TableCell>{index+1}</TableCell>
                             <TableCell>{row.material}</TableCell>
                             <TableCell>{row.supplier.name}</TableCell>
-                            <TableCell>£ {row.price * row.quantity}</TableCell>
-                            <TableCell>{row.vat}</TableCell>
-                            <TableCell>£ {row.totalCost}</TableCell>
+                            <TableCell>£ {Number(row.price * row.quantity).toFixed(2)}</TableCell>
+                            <TableCell>{Number(row.vat).toFixed(2)}</TableCell>
+                            <TableCell>£ {Number(row.totalCost).toFixed(2)}</TableCell>
                             <TableCell>
                                     <Chip
                                         label={row.payment}

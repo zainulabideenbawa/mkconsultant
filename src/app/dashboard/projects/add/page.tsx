@@ -705,7 +705,7 @@ const ProjectForm = () => {
                                     <TableCell>{material.quantity}</TableCell>
                                     <TableCell>{material.unit}</TableCell>
                                     <TableCell>£ {Number(material.price).toFixed(2)}</TableCell>
-                                    <TableCell>{material.vat}%</TableCell>
+                                    <TableCell>{Number(material.vat).toFixed(2)}%</TableCell>
                                     <TableCell>£ {Number(material.totalCost).toFixed(2)}</TableCell>
                                 </TableRow>
                             ))}

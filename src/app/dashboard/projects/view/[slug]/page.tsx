@@ -397,7 +397,7 @@ const Projects = () => {
 
                         no: 1,
                         description: `Project ID - ${String(data?.projectId).padStart(6, '0')}, ${data?.name}`,
-                        price: `£ ${Number(total.subTaskAmount + total.materialAmount + total.markupAmount).toLocaleString()}`
+                        price: `£ ${Number(Number(total.subTaskAmount + total.materialAmount + total.markupAmount).toLocaleString()).toFixed(2)}`
                     }]
                 })
             });
@@ -538,7 +538,7 @@ const Projects = () => {
                 description: row.name,
                 qty: new Date(row.startDate).toLocaleDateString(),
                 price: new Date(row.endDate).toLocaleDateString(),
-                total: `£ ${row.cost.toLocaleString()}`
+                total: `£ ${Number(row.cost.toLocaleString()).toFixed(2)}`
             }))
             let _b = {
                 projectId: String(data?.projectId).padStart(6, '0'),
@@ -785,19 +785,19 @@ const Projects = () => {
                     <Grid item xs={12} sm={6} md={3}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Pending</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {total.totalAmount.toLocaleString()}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Number(total.totalAmount.toLocaleString()).toFixed(2)}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Received</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Math.abs(Number(total.totalAmount - data.remainingAmount)).toLocaleString()}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Number(Math.abs(Number(total.totalAmount - data.remainingAmount)).toLocaleString()).toFixed(2)}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Earning</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {total.markupAmount}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Number(total.markupAmount).toFixed(2)}</Typography>
                         </Box>
                     </Grid>
                 </Grid>}
@@ -936,35 +936,35 @@ const Projects = () => {
                 <Grid container spacing={3} sx={{ marginTop: 10, marginLeft: 4 }}>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Sub-Tasks</Typography>
-                        <Typography variant='body1' >£{total.subTaskAmount.toLocaleString()}</Typography>
+                        <Typography variant='body1' >£{Number(total.subTaskAmount.toLocaleString()).toFixed(2)}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >+</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Material / Cost</Typography>
-                        <Typography variant='body1' >£{total.materialAmount.toLocaleString()}</Typography>
+                        <Typography variant='body1' >£{Number(total.materialAmount.toLocaleString()).toFixed(2)}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >+</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>% Markup</Typography>
-                        <Typography variant='body1' >£{total.markupAmount.toLocaleString()}</Typography>
+                        <Typography variant='body1' >£{Number(total.markupAmount.toLocaleString()).toFixed(2)}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >+</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>VAT</Typography>
-                        <Typography variant='body1' >£{total.vat.toLocaleString()}</Typography>
+                        <Typography variant='body1' >£{Number(total.vat.toLocaleString()).toFixed(2)}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >=</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Quotation</Typography>
-                        <Typography variant='body1' >£{total.totalAmount.toLocaleString()}</Typography>
+                        <Typography variant='body1' >£{Number(total.totalAmount.toLocaleString()).toFixed(2)}</Typography>
                     </Grid>
                 </Grid>
                 {!data?.qutationGenerated && <Button fullWidth variant='contained' color="primary" sx={{ marginTop: 10 }} disabled={submiting} onClick={saveAndGenerateQuotation}>

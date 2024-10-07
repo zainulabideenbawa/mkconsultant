@@ -125,7 +125,7 @@ export default function DashboardTable({ rows,handelOpenDialogue,submiting }: {
                             <TableCell>{String(row.InvoiceId).padStart(6, "0")}</TableCell>
                             <TableCell>{new Date(row.createdDate).toLocaleDateString()}</TableCell>
                             <TableCell>{new Date(row.dueDate).toLocaleDateString()}</TableCell>
-                            <TableCell>£ {row.Amount.toLocaleString()}</TableCell>
+                            <TableCell>£ {row.Amount.toFixed(2).toLocaleString()}</TableCell>
                             <TableCell>
                                 <Chip
                                     label={row.status}

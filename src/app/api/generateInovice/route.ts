@@ -252,7 +252,7 @@ export async function POST(request: NextRequest,) {
 
         <!-- Totals Section -->
         <div class="totals">
-            <div class="grand-total">Total Amount: £ ${body.total}</div>
+            <div class="grand-total">Total Amount: £ ${Number(body.total).toFixed(2)}</div>
         </div>
 
 <!-- Project and Payment Details -->

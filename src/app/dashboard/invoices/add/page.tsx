@@ -177,7 +177,7 @@ const InvoiceForm = () => {
                     data: [{
                         no: 1,
                         description: `Project ID - ${String(_p?.projectId).padStart(6, '0')}, ${_p?.name}`,
-                        price: `£ ${Number(data.amount).toLocaleString()}`
+                        price: `£ ${Number(data.amount).toFixed(2).toLocaleString()}`
                     }]
                 })
             });
@@ -294,7 +294,7 @@ const InvoiceForm = () => {
                                 disabled
                                 label="Total Amount"
 
-                                value={projects.find(f => f.id === watchProject)?.totalAmount || 0}
+                                value={projects.find(f => f.id === watchProject)?.totalAmount.toFixed(2) || 0.00}
 
                             />
                         </Grid>
@@ -345,7 +345,7 @@ const InvoiceForm = () => {
                                 fullWidth
                                 disabled
                                 label="Remaining Amount"
-                                value={remainting}
+                                value={remainting.toFixed(2)}
                             />
                         </Grid>
                         <Grid item xs={12}>

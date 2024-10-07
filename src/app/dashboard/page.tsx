@@ -122,11 +122,11 @@ const [email,setEmail] = useState("")
       },
       {
         title: "Earnings",
-        number: `£ ${Number(body.earning).toFixed(0)}`,
+        number: `£ ${Number(body.earning).toFixed(2)}`,
       },
       {
         title: "Revenue",
-        number: `£ ${body.total}`,
+        number: `£ ${Number(body.total).toFixed(2)}`,
       },
 
     ])
@@ -142,7 +142,7 @@ const [email,setEmail] = useState("")
       clientName: m.client.name,
       date: `${new Date(m.startDate).toLocaleDateString()}`,
       project: 'Call',
-      quote: `£ ${m.totalAmount}`,
+      quote: `£ ${parseFloat(m.totalAmount).toFixed(2)}`,
       status: m.status
     })))
     setLoading(false)
@@ -210,7 +210,7 @@ const [email,setEmail] = useState("")
                 data: [{
                     no: 1,
                     description: `Project ID - ${String(_p?.projectId).padStart(6, '0')}, ${_p?.name}`,
-                    price: `£ ${Number(data.Amount).toLocaleString()}`
+                    price: `£ ${Number(data.Amount).toFixed(2)}`
                 }]
             })
         });
