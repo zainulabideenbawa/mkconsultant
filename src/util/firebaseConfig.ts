@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
 
 
-// firebase of client
+// firebase of client new project check now
 const firebaseConfig = {
     apiKey: "AIzaSyC8x_AvaE_ed6a69V9Ap4OWB4Cr6KzRHkg",
     authDomain: "mkcontracts-portal.firebaseapp.com",
