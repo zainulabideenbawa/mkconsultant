@@ -9,9 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "cockroachdb"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
 }
 
 model User {
@@ -68,7 +67,7 @@ model SubContractor {
 
 model Project {
   id                String        @id @default(cuid())
-  projectId         Int           @default(sequence())
+  projectId         Int           @default(autoincrement())
   name              String
   location          String
   startDate         DateTime
@@ -108,7 +107,7 @@ enum PROJECTSTATUS {
 
 model Client {
   id       String    @id @default(cuid())
-  clientId Int       @default(sequence())
+  clientId Int       @default(autoincrement())
   name     String
   email    String    @unique()
   phone    String
@@ -119,7 +118,7 @@ model Client {
 
 model SubTask {
   id                 String        @id @default(cuid())
-  taskId             Int           @default(sequence())
+  taskId             Int           @default(autoincrement())
   name               String
   description        String
   assingTo           String
@@ -155,7 +154,7 @@ model Material {
 
 model Invoice {
   id              String        @id @default(cuid())
-  InvoiceId       Int           @default(sequence())
+  InvoiceId       Int           @default(autoincrement())
   clientId        String
   client          Client        @relation(fields: [clientId], references: [id])
   Project         Project?      @relation(fields: [projectId], references: [id])
