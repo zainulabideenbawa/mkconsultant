@@ -106,7 +106,7 @@ const InvoiceForm = () => {
 
     return (
         <main>
-            <Typography variant='h4' sx={{ fontWeight: "bold", marginBottom: 4 }}>Generate New Invoice</Typography>
+            <Typography variant='h4' sx={{ fontWeight: "bold", marginBottom: 4 }}>Edit Client</Typography>
             <Paper sx={{ padding: 4 }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>

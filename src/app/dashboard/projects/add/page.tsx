@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray, Controller, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TextField, Button, Container, Grid, Box, Typography, Paper, Icon, Menu, MenuItem, Autocomplete, CircularProgress, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import { TextField, Button, Container, Grid, Box, Typography, Paper, Icon, Menu, MenuItem, Autocomplete, CircularProgress, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton } from '@mui/material';
 import { z } from 'zod';
 import Delete from '@mui/icons-material/Delete'
 
@@ -230,6 +230,11 @@ const ProjectForm = () => {
         setSubmiting(false)
     }
     console.log(client, "client")
+    const handleDeleteMaterial = (index:number)=>{
+        if (index > -1) {
+            setMaterials(materials.filter((_, i) => i!== index));
+        }
+    }
     if (loading) {
         return (
             <main>
@@ -693,6 +698,7 @@ const ProjectForm = () => {
                                 <TableCell>Price</TableCell>
                                 <TableCell>VAT Tax</TableCell>
                                 <TableCell>Total Cost</TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -707,6 +713,11 @@ const ProjectForm = () => {
                                     <TableCell>£ {Number(material.price).toFixed(2)}</TableCell>
                                     <TableCell>{Number(material.vat).toFixed(2)}%</TableCell>
                                     <TableCell>£ {Number(material.totalCost).toFixed(2)}</TableCell>
+                                    <TableCell>
+                                        <IconButton onClick={() => handleDeleteMaterial(index)}>
+                                            <Delete />
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                             <TableRow>
