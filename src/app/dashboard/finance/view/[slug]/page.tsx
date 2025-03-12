@@ -252,31 +252,31 @@ const Projects = () => {
                     <Grid item xs={12} sm={6} md={2.4}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Total Project Cost</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Number(total.totalAmount.toLocaleString()).toFixed(2)}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {total.totalAmount.toLocaleString()}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={2.4}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Total Expense</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Number((total.totalAmount - total.markupAmount).toLocaleString()).toFixed(2)}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {(total.totalAmount - total.markupAmount).toLocaleString()}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={2.4}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Expected Profit</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Number(total.markupAmount.toLocaleString()).toFixed(2)}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {total.markupAmount.toLocaleString()}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={2.4}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Received</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Number((total.totalAmount - data.remainingAmount).toLocaleString()).toFixed(2)}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {(total.totalAmount - data.remainingAmount).toLocaleString()}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={2.4}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Pending</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Number((data.remainingAmount).toLocaleString()).toFixed(2)}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {(data.remainingAmount).toLocaleString()}</Typography>
                         </Box>
                     </Grid>
                 </Grid>}
