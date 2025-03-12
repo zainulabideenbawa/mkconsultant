@@ -219,7 +219,7 @@ export async function POST(request: NextRequest,) {
         <!-- Header Section -->
         <header>
         <div class="header">
-            <img src="https://mkcontractltd.tekscrum.com/wp-content/uploads/2024/07/logo.png" alt="Company Logo">
+            <img src="https://mkcontracts.com/wp-content/uploads/2024/07/logo.png" alt="Company Logo">
             <div class="company-text">
             </div>
 
@@ -254,9 +254,9 @@ export async function POST(request: NextRequest,) {
 
         <!-- Totals Section -->
         <div class="totals">
-            <div>Sub Total: £ ${Number(body.subtotal).toFixed(2)}</div>
-            <div>VAT: £ ${Number(body.vat).toFixed(2)}</div>
-            <div class="grand-total">Total Amount: £ ${Number(body.total).toFixed(2)}</div>
+            <div>Sub Total: £ ${body.subtotal}</div>
+            <div>VAT: £ ${body.vat}</div>
+            <div class="grand-total">Total Amount: £ ${body.total}</div>
         </div>
 
 
@@ -266,13 +266,13 @@ export async function POST(request: NextRequest,) {
             <p>Thank you for business with us!</p>
             <p>www.mkcontracts.com | +44 (0) 208 518 2100 | 50 Buntingbridge, Newbury Park, Essex, IG2 7LR</p>
             <!-- Placeholder Images for Footer Logos -->
-            <img src="https://mkcontractltd.tekscrum.com/wp-content/uploads/2022/09/download-3.png" alt="Logo 1">
-            <img src="https://mkcontractltd.tekscrum.com/wp-content/uploads/2024/08/Gold_CMYK.jpg" alt="Logo 2">
-            <img src="https://mkcontractltd.tekscrum.com/wp-content/uploads/2024/08/Enviromnetal-Agency-Logo.png" alt="Logo 3">
-            <img src="https://mkcontractltd.tekscrum.com/wp-content/uploads/2024/08/CHAS-GOLD-SIGN.png" alt="Logo 4">
-            <img src="https://mkcontractltd.tekscrum.com/wp-content/uploads/2024/08/safetcontractor-banner.jpg" alt="Logo 5">
-            <img src="https://mkcontractltd.tekscrum.com/wp-content/uploads/2024/09/alcumus-removebg-preview.jpg" alt="Logo 6">
-            <img src="https://mkcontractltd.tekscrum.com/wp-content/uploads/2022/09/construction-line-social-value-accredited-logo-e1668081874697.png" alt="Logo 7">
+            <img src="https://mkcontracts.com/wp-content/uploads/2022/09/download-3.png" alt="Logo 1">
+            <img src="https://mkcontracts.com/wp-content/uploads/2024/08/Gold_CMYK.jpg" alt="Logo 2">
+            <img src="https://mkcontracts.com/wp-content/uploads/2024/08/Enviromnetal-Agency-Logo.png" alt="Logo 3">
+            <img src="https://mkcontracts.com/wp-content/uploads/2024/08/CHAS-GOLD-SIGN.png" alt="Logo 4">
+            <img src="https://mkcontracts.com/wp-content/uploads/2024/08/safetcontractor-banner.jpg" alt="Logo 5">
+            <img src="https://mkcontracts.com/wp-content/uploads/2024/09/alcumus-removebg-preview.jpg" alt="Logo 6">
+            <img src="https://mkcontracts.com/wp-content/uploads/2022/09/construction-line-social-value-accredited-logo-e1668081874697.png" alt="Logo 7">
         </div>
         </footer>
     </div>

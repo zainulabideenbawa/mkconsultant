@@ -397,7 +397,7 @@ const Projects = () => {
 
                         no: 1,
                         description: `Project ID - ${String(data?.projectId).padStart(6, '0')}, ${data?.name}`,
-                        price: `£ ${Number(Number(total.subTaskAmount + total.materialAmount + total.markupAmount).toLocaleString()).toFixed(2)}`
+                        price: `£ ${(total.subTaskAmount + total.materialAmount + total.markupAmount).toLocaleString()}`
                     }]
                 })
             });
@@ -538,7 +538,7 @@ const Projects = () => {
                 description: row.name,
                 qty: new Date(row.startDate).toLocaleDateString(),
                 price: new Date(row.endDate).toLocaleDateString(),
-                total: `£ ${Number(row.cost.toLocaleString()).toFixed(2)}`
+                total: `£ ${(row.cost.toLocaleString())}`
             }))
             let _b = {
                 projectId: String(data?.projectId).padStart(6, '0'),
@@ -548,9 +548,9 @@ const Projects = () => {
                 phone: findSupplier.phone,
                 email: findSupplier.email,
                 location: findSupplier.address,
-                subtotal: `${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost), 0)).toLocaleString()}`,
-                vat: `${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost * (subTask.vat / 100)), 0)).toLocaleString()}`,
-                total: `${Number(work.subTaks.reduce((total, subTask) => total + (subTask.cost + (subTask.vat / 100 * subTask.cost)), 0)).toLocaleString()}`,
+                subtotal: `${(work.subTaks.reduce((total, subTask) => total + (subTask.cost), 0)).toLocaleString()}`,
+                vat: `${(work.subTaks.reduce((total, subTask) => total + (subTask.cost * (subTask.vat / 100)), 0)).toLocaleString()}`,
+                total: `${(work.subTaks.reduce((total, subTask) => total + (subTask.cost + (subTask.vat / 100 * subTask.cost)), 0)).toLocaleString()}`,
                 data: _d
             }
             console.log(_b)
@@ -698,6 +698,7 @@ const Projects = () => {
         });
 
     };
+    console.log(total,"total")
     if (loading) {
         return (
             <main>
@@ -785,7 +786,7 @@ const Projects = () => {
                     <Grid item xs={12} sm={6} md={3}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Pending</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Number(total.totalAmount.toLocaleString()).toFixed(2)}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {isNaN(Number(total.totalAmount.toLocaleString())) ? total.totalAmount.toLocaleString():Number(total.totalAmount.toLocaleString()).toFixed(2)}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
@@ -936,35 +937,37 @@ const Projects = () => {
                 <Grid container spacing={3} sx={{ marginTop: 10, marginLeft: 4 }}>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Sub-Tasks</Typography>
-                        <Typography variant='body1' >£{Number(total.subTaskAmount.toLocaleString()).toFixed(2)}</Typography>
+                        <Typography variant='body1' >£{isNaN(Number(total.subTaskAmount.toLocaleString())) ?  total.subTaskAmount.toLocaleString():Number(total.subTaskAmount.toLocaleString())}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >+</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Material / Cost</Typography>
-                        <Typography variant='body1' >£{Number(total.materialAmount.toLocaleString()).toFixed(2)}</Typography>
+                        <Typography variant='body1' >£{isNaN(Number(total.materialAmount.toLocaleString()))?total.materialAmount.toLocaleString():Number(total.materialAmount.toLocaleString()).toFixed(2)}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >+</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>% Markup</Typography>
-                        <Typography variant='body1' >£{Number(total.markupAmount.toLocaleString()).toFixed(2)}</Typography>
+                        <Typography variant='body1' >£{isNaN(Number(total.markupAmount.toLocaleString()))?total.markupAmount.toLocaleString():Number(total.materialAmount.toLocaleString()).toFixed(2)}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >+</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>VAT</Typography>
-                        <Typography variant='body1' >£{Number(total.vat.toLocaleString()).toFixed(2)}</Typography>
+                        <Typography variant='body1' >£{isNaN(Number(total.vat.toLocaleString()))?total.vat.toLocaleString():Number(total.materialAmount.toLocaleString()).toFixed(2)}</Typography>
                     </Grid>
                     <Grid xs={1}>
                         <Typography variant='body1' >=</Typography>
                     </Grid>
                     <Grid xs={1.5}>
                         <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>Quotation</Typography>
-                        <Typography variant='body1' >£{Number(total.totalAmount.toLocaleString()).toFixed(2)}</Typography>
+                        <Typography variant='body1' >£{isNaN(Number(total.totalAmount.toLocaleString()))? 
+                        total.totalAmount.toLocaleString()
+                        :Number(total.materialAmount.toLocaleString()).toFixed(2)}</Typography>
                     </Grid>
                 </Grid>
                 {!data?.qutationGenerated && <Button fullWidth variant='contained' color="primary" sx={{ marginTop: 10 }} disabled={submiting} onClick={saveAndGenerateQuotation}>
@@ -1312,7 +1315,7 @@ const Projects = () => {
                 }}
             >
                 <DialogContent>
-                    <Typography variant='body1' >Edit Markup Percentage</Typography>
+                    <Typography variant='body1' >Upload Document</Typography>
                     <input
                         type="file"
                         multiple
