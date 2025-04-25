@@ -257,7 +257,18 @@ export async function POST(request: NextRequest,) {
 
 <!-- Project and Payment Details -->
 
-
+<table class="payment-details">
+<tr>
+    <th>PAYMENT METHOD:</th>
+</tr>
+<tr>
+    <td>
+        Bank Name: Bank Of Scotland<br>
+        Account Number: 10024265
+        Short Code: 120925
+    </td>
+</tr>
+</table>
 
 
         <!-- Footer Section -->
@@ -322,14 +333,3 @@ function generateRows(items: {
 }
 
 
-// <table class="payment-details">
-// <tr>
-//     <th>PAYMENT METHOD:</th>
-// </tr>
-// <tr>
-//     <td>
-//         Bank Name: Borcelle<br>
-//         Account Number: 123-456-7890
-//     </td>
-// </tr>
-// </table>
