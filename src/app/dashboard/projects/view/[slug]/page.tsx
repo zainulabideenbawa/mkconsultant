@@ -698,7 +698,6 @@ const Projects = () => {
         });
 
     };
-    console.log(total,"total")
     if (loading) {
         return (
             <main>
@@ -792,7 +791,7 @@ const Projects = () => {
                     <Grid item xs={12} sm={6} md={3}>
                         <Box sx={{ border: "1px solid black", borderRadius: 5, textAlign: "center" }}>
                             <Typography variant='h6' sx={{ fontWeight: "bold", marginBottom: 2 }}>Payment Received</Typography>
-                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Number(Math.abs(Number(total.totalAmount - data.remainingAmount)).toLocaleString()).toFixed(2)}</Typography>
+                            <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>£ {Number(Math.abs(Number(total.totalAmount - data.remainingAmount))).toFixed(2)}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
@@ -957,7 +956,7 @@ const Projects = () => {
                         <Typography variant='body1' >+</Typography>
                     </Grid>
                     <Grid xs={1.5}>
-                        <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>VAT</Typography>
+                        <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 2 }}>% VAT</Typography>
                         <Typography variant='body1' >£{isNaN(Number(total.vat.toLocaleString()))?total.vat.toLocaleString():Number(total.materialAmount.toLocaleString()).toFixed(2)}</Typography>
                     </Grid>
                     <Grid xs={1}>

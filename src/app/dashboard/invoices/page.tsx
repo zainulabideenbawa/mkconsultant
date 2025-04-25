@@ -4,8 +4,11 @@ import { faker } from '@faker-js/faker';
 import SuplierTable from './table'
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
+import { Invoice } from "@/types";
 const Suppliers = () => {
+    const [submiting, setSubmitting] = useState(false)
     const [loading, setLoading] = useState(true)
+    const [invoicing,setInvoicing] = useState<Invoice[]>([])
     const [orignal, setOrignal] = useState<{
         id: string,
         clientName: string,
@@ -47,6 +50,7 @@ const Suppliers = () => {
         }
         let body = await res.json()
         console.log(body)
+        setInvoicing(body.clients)
         setInvoiceData(body.clients.map((f: any) => (
             {
                 id: f.id,
@@ -71,6 +75,68 @@ const Suppliers = () => {
         )))
         setLoading(false)
     }
+
+      const generatePDF = async (id: string) => {
+        setSubmitting(true)
+        const data = invoicing.find(f => f.id === id)
+        // console.log(data)
+        if(!data) {
+            setSubmitting(false)
+            return null}
+        const _c = data.client
+        const _p = data.Project
+        // console.log(_p,_c,data)
+        if (!_c && _p) {
+            setSubmitting(false)
+            return null}
+        // console.log(_p,_c,data)
+        try {
+            const res = await fetch('/api/generateInovice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/pdf'
+                },
+                body: JSON.stringify({
+                    invoiceNumber: String(data.InvoiceId).padStart(6, "0"),
+                    invoiceDate: new Date().toLocaleDateString(),
+                    invoiceDueDate: new Date(data.dueDate).toLocaleDateString(),
+                    name: _c?.name || "",
+                    phone: _c?.phone || "",
+                    email: _c?.email || "",
+                    location: _c?.location || "",
+                    total: `${String(data.Amount).toLocaleString()}`,
+                    data: [{
+                        no: 1,
+                        description: `Project ID - ${String(_p?.projectId).padStart(6, '0')}, ${_p?.name}`,
+                        price: `£ ${Number(data.Amount).toFixed(2)}`
+                    }]
+                })
+            });
+    
+            if (res.ok) {
+                const blob = await res.blob();  // Convert the response to a Blob (binary data)
+                const url = window.URL.createObjectURL(blob);  // Create a temporary URL for the Blob
+    
+                // Create a link element
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `Invoice ${data.InvoiceId}.pdf`);  // Set the file name for the download
+                document.body.appendChild(link);  // Append the link to the document
+                link.click();  // Programmatically click the link to trigger the download
+                if (link?.parentNode)
+                    // Clean up
+                    link?.parentNode.removeChild(link);  // Remove the link element from the document
+                window.URL.revokeObjectURL(url);  // Release the Blob URL to free up memory
+            } else {
+                console.error('Failed to download PDF:', res.statusText);
+            }
+        } catch (error) {
+            console.error('Error while fetching the PDF:', error);
+        }
+        setSubmitting(false)
+    
+    };
+    
     if (loading) {
         return (
             <main>
@@ -88,7 +154,7 @@ const Suppliers = () => {
                         <Button variant='contained' fullWidth sx={{ flex: 1 }} >Generate NEw Invoice</Button>
                     </Link>
                 </Box>
-                <SuplierTable rows={invoiceData} />
+                <SuplierTable rows={invoiceData} func={generatePDF} submiting={submiting} />
             </Paper>
         </main>
     )

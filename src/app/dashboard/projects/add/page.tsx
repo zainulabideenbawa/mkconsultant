@@ -500,7 +500,7 @@ const ProjectForm = () => {
                                                 control={control}
                                                 render={({ field }) => (
                                                     <TextField
-                                                        label="VAT"
+                                                        label="VAT %"
                                                         // type="number"
                                                         {...field}
                                                         fullWidth

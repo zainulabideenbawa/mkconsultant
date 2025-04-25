@@ -1,7 +1,7 @@
 'use client'
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Box, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination, TableRow, Paper, IconButton, TableHead, Chip } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination, TableRow, Paper, IconButton, TableHead, Chip, CircularProgress } from '@mui/material';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
@@ -74,7 +74,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
     );
 }
 
-export default function DashboardTable({ rows }: {
+export default function DashboardTable({ rows ,func,submiting}: {
     rows: {
         id: string,
         clientName: string,
@@ -83,7 +83,9 @@ export default function DashboardTable({ rows }: {
         phone: string,
         project: string,
         amount: string,
-    }[]
+    }[],
+    func: (id: string) => void,
+    submiting: boolean
 }) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -117,7 +119,7 @@ export default function DashboardTable({ rows }: {
                         <TableCell>Phone</TableCell>
                         <TableCell>Project #</TableCell>
                         <TableCell>Amount</TableCell>
-                        {/* <TableCell>Action</TableCell> */}
+                        <TableCell>Action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -132,14 +134,11 @@ export default function DashboardTable({ rows }: {
                             <TableCell>{row.phone}</TableCell>
                             <TableCell>{row.project}</TableCell>
                             <TableCell>{row.amount}</TableCell>
-                            {/* <TableCell>
-                                <IconButton>
-                                    <Edit />
-                                </IconButton>
-                                <IconButton>
-                                    <Delete />
-                                </IconButton>
-                            </TableCell> */}
+                            <TableCell>
+                                {submiting ? <CircularProgress/>:<IconButton disabled={submiting} onClick={() => func(row.id)}>
+                                    <RemoveRedEye />
+                                </IconButton>}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

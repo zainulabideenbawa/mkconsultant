@@ -12,7 +12,7 @@ const schema = z.object({
     phone: z.string().max(11),
     email:z.string().email(),
     dateOfBirth: z.string().min(3),
-    applicantType: z.string().min(1),
+    // applicantType: z.string().min(1),
     approxTeamSize: z.string(),
     priceRate: z.string(),
     qualification: z.string(),
@@ -46,7 +46,7 @@ const Suppliers = () => {
         setSubmiting(true)
         const res = await fetch('/api/subcontractors',{
             method:"POST",
-            body:JSON.stringify({...data})
+            body:JSON.stringify({...data,applicantType:"Type1"})
         })
         if(res.ok){
             // console.log(await res.json())
@@ -179,7 +179,7 @@ const Suppliers = () => {
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
+                        {/* <Grid item xs={12} sm={6} md={4}>
                             <TextField
                                 select
                                 variant="outlined"
@@ -195,7 +195,7 @@ const Suppliers = () => {
                                 <MenuItem value="">None</MenuItem>
                                 {["Type1", "Type2", "Type3"].map((v, i) => <MenuItem value={v} key={i}>{v}</MenuItem>)}
                             </TextField>
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={12} sm={6} md={4}>
                             <TextField
                                 variant="outlined"
@@ -276,7 +276,7 @@ const Suppliers = () => {
                                 helperText={errors.qualification ? errors.qualification.message : ''}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6} md={8}/>
+                        {/* <Grid item xs={12} sm={6} md={8}/> */}
 
                         <Grid item xs={12} sm={6} md={3}>
                             {renderCheckboxGroup("Tool & Equipment", toolsOptions, register, 'tools')}

@@ -257,17 +257,7 @@ export async function POST(request: NextRequest,) {
 
 <!-- Project and Payment Details -->
 
-        <table class="payment-details">
-            <tr>
-                <th>PAYMENT METHOD:</th>
-            </tr>
-            <tr>
-                <td>
-                    Bank Name: Borcelle<br>
-                    Account Number: 123-456-7890
-                </td>
-            </tr>
-        </table>
+
 
 
         <!-- Footer Section -->
@@ -330,3 +320,16 @@ function generateRows(items: {
     });
     return rows;
 }
+
+
+// <table class="payment-details">
+// <tr>
+//     <th>PAYMENT METHOD:</th>
+// </tr>
+// <tr>
+//     <td>
+//         Bank Name: Borcelle<br>
+//         Account Number: 123-456-7890
+//     </td>
+// </tr>
+// </table>
