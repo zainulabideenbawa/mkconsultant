@@ -264,7 +264,7 @@ export async function POST(request: NextRequest,) {
 <tr>
     <td>
         Bank Name: Bank Of Scotland<br>
-        Account Number: 10024265
+        Account Number: 10024265 <br>
         Short Code: 120925
     </td>
 </tr>
